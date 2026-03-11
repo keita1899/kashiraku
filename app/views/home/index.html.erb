@@ -1,0 +1,11 @@
+<h1>カシラク</h1>
+<% if user_signed_in? %>
+  <p><%= current_user.name.presence || current_user.email %>さん、ようこそ</p>
+  <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
+<% else %>
+  <p>個人菓子店向けの原価計算アプリ</p>
+  <%= button_to "Googleでログイン",
+      user_google_oauth2_omniauth_authorize_path,
+      method: :post,
+      data: { turbo: false } %>
+<% end %>
