@@ -2,11 +2,11 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
   def self.from_omniauth(auth)
-    find_or_create_by(provider: auth.provider, uid: auth.uid) do |user|
+    create_or_find_by!(provider: auth.provider, uid: auth.uid) do |user|
       user.email = auth.info.email
       user.name = auth.info.name
     end.tap do |user|
-      user.update(
+      user.update!(
         email: auth.info.email,
         name: auth.info.name
       )
