@@ -24,3 +24,10 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
     - "config/**/*"
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - "spec/requests/**/*"
