@@ -18,6 +18,11 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 # Japanese locale support [https://github.com/svenfuchs/rails-i18n]
 gem "rails-i18n"
+# Authentication [https://github.com/heartcombo/devise]
+gem "devise"
+gem "devise-i18n"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
