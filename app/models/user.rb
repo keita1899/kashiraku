@@ -12,4 +12,13 @@ class User < ApplicationRecord
       )
     end
   end
+
+  def self.guest
+    uid = "guest_#{SecureRandom.uuid}"
+    create!(provider: "guest", uid: uid, email: "#{uid}@example.com", name: "ゲスト")
+  end
+
+  def guest?
+    provider == "guest"
+  end
 end
