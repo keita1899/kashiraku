@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     delete "users/sign_out", to: "users/sessions#destroy", as: :destroy_user_session
+    post "users/guest_sign_in", to: "users/guest_sessions#create", as: :guest_sign_in
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
