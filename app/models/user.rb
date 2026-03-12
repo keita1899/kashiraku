@@ -18,6 +18,10 @@ class User < ApplicationRecord
     create!(provider: "guest", uid: uid, email: "#{uid}@example.com", name: "ゲスト")
   end
 
+  def display_name
+    name.presence || email
+  end
+
   def guest?
     provider == "guest"
   end

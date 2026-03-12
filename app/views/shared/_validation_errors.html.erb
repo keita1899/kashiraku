@@ -1,0 +1,14 @@
+<% if object.errors.any? %>
+  <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+    <h3 class="text-red-700 text-sm font-semibold mb-2">
+      <%= I18n.t("errors.messages.not_saved",
+          count: object.errors.count,
+          resource: object.model_name.human) %>
+    </h3>
+    <ul class="list-disc list-inside text-red-600 text-sm space-y-1">
+      <% object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
