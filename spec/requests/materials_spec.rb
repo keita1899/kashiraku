@@ -34,6 +34,12 @@ RSpec.describe "Materials", type: :request do
       patch material_path(material), params: valid_params
       expect(response).to redirect_to(root_path)
     end
+
+    it "削除しようとするとリダイレクトされる" do
+      material = create(:material, user: user)
+      delete material_path(material)
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "GET /materials" do
@@ -112,6 +118,26 @@ RSpec.describe "Materials", type: :request do
     it "他人の原材料は更新できない" do
       material = create(:material, user: other_user)
       patch material_path(material), params: { material: { name: "強力粉" } }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "DELETE /materials/:id" do
+    before { sign_in user }
+
+    it "自分の原材料を削除できる" do
+      material = create(:material, user: user)
+      expect {
+        delete material_path(material)
+      }.to change(Material, :count).by(-1)
+      expect(response).to redirect_to(materials_path)
+    end
+
+    it "他人の原材料は削除できない" do
+      material = create(:material, user: other_user)
+      expect {
+        delete material_path(material)
+      }.not_to change(Material, :count)
       expect(response).to have_http_status(:not_found)
     end
   end

@@ -29,6 +29,12 @@ class MaterialsController < ApplicationController
     end
   end
 
+  def destroy
+    @material = current_user.materials.find(params[:id])
+    @material.destroy!
+    redirect_to materials_path, notice: "原材料を削除しました"
+  end
+
   private
 
   def material_params
