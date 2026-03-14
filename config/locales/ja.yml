@@ -1,0 +1,23 @@
+ja:
+  activerecord:
+    models:
+      material: 原材料
+    attributes:
+      material:
+        name: 原材料名
+        display_name: 表示名
+        purchase_price: 購入価格
+        purchase_quantity: 購入量
+        unit: 単位
+        unit_price: 単価
+        additive: 添加物
+    errors:
+      messages:
+        not_saved:
+          one: "%{resource}の保存時に1件のエラーが発生しました"
+          other: "%{resource}の保存時に%{count}件のエラーが発生しました"
+  errors:
+    messages:
+      not_saved:
+        one: "%{resource}の保存時に1件のエラーが発生しました"
+        other: "%{resource}の保存時に%{count}件のエラーが発生しました"
