@@ -60,22 +60,22 @@ RSpec.describe Material, type: :model do
       expect(material.unit_price).to eq(0.5)
     end
 
-    it "購入量が0の場合は単価がnilになる" do
+    it "購入量が0の場合は単価が0になる" do
       material = build(:material, purchase_price: 500, purchase_quantity: 0)
       material.valid?
-      expect(material.unit_price).to be_nil
+      expect(material.unit_price).to eq(0)
     end
 
-    it "購入価格がnilの場合は単価がnilになる" do
+    it "購入価格がnilの場合は単価が0になる" do
       material = build(:material, purchase_price: nil, purchase_quantity: 1000)
       material.valid?
-      expect(material.unit_price).to be_nil
+      expect(material.unit_price).to eq(0)
     end
 
-    it "購入量がnilの場合は単価がnilになる" do
+    it "購入量がnilの場合は単価が0になる" do
       material = build(:material, purchase_price: 500, purchase_quantity: nil)
       material.valid?
-      expect(material.unit_price).to be_nil
+      expect(material.unit_price).to eq(0)
     end
 
     it "更新時にも単価が再計算される" do

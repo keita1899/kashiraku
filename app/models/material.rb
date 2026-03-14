@@ -17,7 +17,7 @@ class Material < ApplicationRecord
     if purchase_price&.positive? && purchase_quantity&.positive?
       self.unit_price = (purchase_price / purchase_quantity).round(UNIT_PRICE_SCALE)
     else
-      self.unit_price = nil
+      self.unit_price = 0
     end
   end
 end
