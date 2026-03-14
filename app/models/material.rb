@@ -1,5 +1,6 @@
 class Material < ApplicationRecord
   ALLOWED_UNITS = %w[g ml].freeze
+  UNIT_PRICE_SCALE = 4
 
   belongs_to :user
 
@@ -13,8 +14,8 @@ class Material < ApplicationRecord
   private
 
   def calculate_unit_price
-    if purchase_price.present? && purchase_quantity&.positive?
-      self.unit_price = purchase_price / purchase_quantity
+    if purchase_price&.positive? && purchase_quantity&.positive?
+      self.unit_price = (purchase_price / purchase_quantity).round(UNIT_PRICE_SCALE)
     else
       self.unit_price = nil
     end
