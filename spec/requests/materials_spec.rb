@@ -4,7 +4,7 @@ RSpec.describe "Materials", type: :request do
   let(:user) { create(:user, provider: "google_oauth2", uid: "123", email: "test@example.com") }
   let(:other_user) { create(:user, provider: "google_oauth2", uid: "456", email: "other@example.com") }
   let(:valid_params) do
-    { material: { name: "薄力粉", purchase_price: 300, purchase_quantity: 1000, unit: "g", unit_price: 0.3 } }
+    { material: { name: "薄力粉", purchase_price: 300, purchase_quantity: 1000, unit: "g" } }
   end
 
   describe "未ログイン時" do
