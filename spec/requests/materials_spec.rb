@@ -22,6 +22,18 @@ RSpec.describe "Materials", type: :request do
       post materials_path, params: valid_params
       expect(response).to redirect_to(root_path)
     end
+
+    it "編集ページにアクセスするとリダイレクトされる" do
+      material = create(:material, user: user)
+      get edit_material_path(material)
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "更新しようとするとリダイレクトされる" do
+      material = create(:material, user: user)
+      patch material_path(material), params: valid_params
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "GET /materials" do
@@ -62,6 +74,45 @@ RSpec.describe "Materials", type: :request do
         post materials_path, params: { material: { name: "" } }
       }.not_to change(Material, :count)
       expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  describe "GET /materials/:id/edit" do
+    before { sign_in user }
+
+    it "自分の原材料の編集フォームが表示される" do
+      material = create(:material, user: user)
+      get edit_material_path(material)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "他人の原材料にはアクセスできない" do
+      material = create(:material, user: other_user)
+      get edit_material_path(material)
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "PATCH /materials/:id" do
+    before { sign_in user }
+
+    it "有効なパラメータで原材料が更新される" do
+      material = create(:material, user: user)
+      patch material_path(material), params: { material: { name: "強力粉" } }
+      expect(response).to redirect_to(materials_path)
+      expect(material.reload.name).to eq("強力粉")
+    end
+
+    it "無効なパラメータではエラーが表示される" do
+      material = create(:material, user: user)
+      patch material_path(material), params: { material: { name: "" } }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "他人の原材料は更新できない" do
+      material = create(:material, user: other_user)
+      patch material_path(material), params: { material: { name: "強力粉" } }
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

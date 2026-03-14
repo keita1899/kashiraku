@@ -14,6 +14,7 @@
           <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入価格</th>
           <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入量</th>
           <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">単価</th>
+          <th class="w-10"></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-100">
@@ -28,6 +29,13 @@
             <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.purchase_price, unit: "¥", precision: 0) %></td>
             <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= material.purchase_quantity %><%= material.unit %></td>
             <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.unit_price, unit: "¥", precision: 2) %>/<%= material.unit %></td>
+            <td class="px-4 py-3 text-center">
+              <%= link_to edit_material_path(material), class: "text-gray-400 hover:text-orange-500", title: "編集" do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

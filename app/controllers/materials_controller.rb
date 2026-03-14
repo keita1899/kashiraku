@@ -16,6 +16,19 @@ class MaterialsController < ApplicationController
     end
   end
 
+  def edit
+    @material = current_user.materials.find(params[:id])
+  end
+
+  def update
+    @material = current_user.materials.find(params[:id])
+    if @material.update(material_params)
+      redirect_to materials_path, notice: "原材料を更新しました"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def material_params
