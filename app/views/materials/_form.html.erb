@@ -1,0 +1,53 @@
+<%= form_with(model: material, class: "space-y-6") do |f| %>
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :name, class: "w-full border #{error_border(f.object, :name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: material, field: :name %>
+  </div>
+
+  <div>
+    <%= f.label :display_name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :display_name, class: "w-full border #{error_border(f.object, :display_name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <p class="text-xs text-gray-500 mt-1">食品表示ラベルに表示する名前（空欄の場合は原材料名を使用）</p>
+    <%= render "shared/field_errors", object: material, field: :display_name %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :purchase_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :purchase_price, step: 0.01, min: 0, class: "w-full border #{error_border(f.object, :purchase_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: material, field: :purchase_price %>
+    </div>
+
+    <div>
+      <%= f.label :purchase_quantity, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :purchase_quantity, step: 0.01, min: 0, class: "w-full border #{error_border(f.object, :purchase_quantity)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: material, field: :purchase_quantity %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :unit, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :unit, Material::ALLOWED_UNITS.map { |u| [u, u] },
+          {}, class: "w-full border #{error_border(f.object, :unit)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: material, field: :unit %>
+    </div>
+
+    <div>
+      <%= f.label :unit_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :unit_price, step: 0.0001, min: 0, class: "w-full border #{error_border(f.object, :unit_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: material, field: :unit_price %>
+    </div>
+  </div>
+
+  <div class="flex items-center">
+    <%= f.check_box :additive, class: "rounded #{error_border(f.object, :additive)} text-orange-500 focus:ring-orange-500 cursor-pointer" %>
+    <%= f.label :additive, class: "ml-2 text-sm text-gray-700 cursor-pointer" %>
+    <%= render "shared/field_errors", object: material, field: :additive %>
+  </div>
+
+  <div>
+    <%= f.submit class: "w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>
+  </div>
+<% end %>

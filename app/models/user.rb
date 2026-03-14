@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
+  has_many :materials, dependent: :destroy
+
   def self.from_omniauth(auth)
     create_or_find_by!(provider: auth.provider, uid: auth.uid) do |user|
       user.email = auth.info.email

@@ -1,0 +1,58 @@
+<div class="max-w-4xl mx-auto">
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-900">原材料一覧</h1>
+  <%= link_to "登録", new_material_path,
+      class: "bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 text-sm font-medium" %>
+</div>
+
+<% if @materials.any? %>
+  <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">原材料名</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入価格</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入量</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">単価</th>
+          <th class="w-10"></th>
+          <th class="w-10"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @materials.each do |material| %>
+          <tr>
+            <td class="px-4 py-3 text-sm text-gray-900">
+              <%= material.name %>
+              <% if material.additive? %>
+                <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">添加物</span>
+              <% end %>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.purchase_price, unit: "¥", precision: 0) %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= material.purchase_quantity %><%= material.unit %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.unit_price, unit: "¥", precision: 2) %>/<%= material.unit %></td>
+            <td class="px-4 py-3 text-center">
+              <%= link_to edit_material_path(material), class: "text-gray-400 hover:text-orange-500", title: "編集" do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              <% end %>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <%= button_to material_path(material), method: :delete, class: "text-gray-400 hover:text-red-500 cursor-pointer", title: "削除", data: { turbo_confirm: "「#{material.name}」を削除しますか？" } do %>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+    <p class="text-gray-500 mb-4">原材料がまだ登録されていません</p>
+    <%= link_to "最初の原材料を登録する", new_material_path, class: "text-orange-500 hover:text-orange-700 text-sm font-medium" %>
+  </div>
+<% end %>
+</div>
