@@ -4,7 +4,6 @@ FactoryBot.define do
     purchase_price { 500 }
     purchase_quantity { 1000 }
     unit { "g" }
-    unit_price { 0.5 }
     additive { false }
     user
   end
