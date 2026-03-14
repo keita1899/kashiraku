@@ -5,7 +5,7 @@
 
       <% if user_signed_in? %>
         <nav class="hidden md:flex items-center space-x-6">
-          <%= link_to "原材料", "#", class: "text-gray-600 hover:text-gray-900 text-sm" %>
+          <%= link_to "原材料", materials_path, class: "text-gray-600 hover:text-gray-900 text-sm" %>
           <%= link_to "商品", "#", class: "text-gray-600 hover:text-gray-900 text-sm" %>
           <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
               class: "text-gray-600 hover:text-gray-900 text-sm cursor-pointer" %>
@@ -20,7 +20,7 @@
         <div class="hidden md:hidden fixed inset-0 top-16 bg-black/30 z-40" data-menu-target="overlay" data-action="click->menu#toggle"></div>
 
         <nav class="hidden md:hidden absolute top-16 left-0 right-0 bg-white border-b border-gray-100 px-4 py-3 space-y-3 z-50" data-menu-target="menu">
-          <%= link_to "原材料", "#", class: "block text-gray-600 hover:text-gray-900 text-sm" %>
+          <%= link_to "原材料", materials_path, class: "block text-gray-600 hover:text-gray-900 text-sm" %>
           <%= link_to "商品", "#", class: "block text-gray-600 hover:text-gray-900 text-sm" %>
           <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
               class: "block text-gray-600 hover:text-gray-900 text-sm text-left w-full cursor-pointer" %>

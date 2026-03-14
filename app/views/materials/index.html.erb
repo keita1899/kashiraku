@@ -1,0 +1,42 @@
+<div class="max-w-4xl mx-auto">
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-900">原材料一覧</h1>
+  <%= link_to "登録", new_material_path,
+      class: "bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 text-sm font-medium" %>
+</div>
+
+<% if @materials.any? %>
+  <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">原材料名</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入価格</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">購入量</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">単価</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @materials.each do |material| %>
+          <tr>
+            <td class="px-4 py-3 text-sm text-gray-900">
+              <%= material.name %>
+              <% if material.additive? %>
+                <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">添加物</span>
+              <% end %>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.purchase_price, unit: "¥", precision: 0) %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= material.purchase_quantity %><%= material.unit %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.unit_price, unit: "¥", precision: 2) %>/<%= material.unit %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+    <p class="text-gray-500 mb-4">原材料がまだ登録されていません</p>
+    <%= link_to "最初の原材料を登録する", new_material_path, class: "text-orange-500 hover:text-orange-700 text-sm font-medium" %>
+  </div>
+<% end %>
+</div>
