@@ -31,8 +31,11 @@ class MaterialsController < ApplicationController
 
   def destroy
     @material = current_user.materials.find(params[:id])
-    @material.destroy!
-    redirect_to materials_path, notice: "原材料を削除しました"
+    if @material.destroy
+      redirect_to materials_path, notice: "原材料を削除しました"
+    else
+      redirect_to materials_path, alert: "原材料の削除に失敗しました"
+    end
   end
 
   private

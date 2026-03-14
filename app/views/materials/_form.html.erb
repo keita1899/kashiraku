@@ -15,9 +15,7 @@
   <div class="grid grid-cols-2 gap-4">
     <div>
       <%= f.label :purchase_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <div class="relative">
-        <%= f.number_field :purchase_price, step: 0.01, min: 0, class: "w-full border #{error_border(f.object, :purchase_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
-      </div>
+      <%= f.number_field :purchase_price, step: 0.01, min: 0, class: "w-full border #{error_border(f.object, :purchase_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
       <%= render "shared/field_errors", object: material, field: :purchase_price %>
     </div>
 
@@ -31,7 +29,7 @@
   <div class="grid grid-cols-2 gap-4">
     <div>
       <%= f.label :unit, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.select :unit, [["g", "g"], ["ml", "ml"]],
+      <%= f.select :unit, Material::ALLOWED_UNITS.map { |u| [u, u] },
           {}, class: "w-full border #{error_border(f.object, :unit)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
       <%= render "shared/field_errors", object: material, field: :unit %>
     </div>
