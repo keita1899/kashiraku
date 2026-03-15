@@ -1,6 +1,6 @@
 class MaterialsController < ApplicationController
   def index
-    @materials = current_user.materials.order(created_at: :desc)
+    @materials = current_user.materials.includes(:allergens).order(created_at: :desc)
   end
 
   def new
@@ -41,6 +41,6 @@ class MaterialsController < ApplicationController
   private
 
   def material_params
-    params.require(:material).permit(:name, :display_name, :purchase_price, :purchase_quantity, :unit, :additive)
+    params.require(:material).permit(:name, :display_name, :purchase_price, :purchase_quantity, :unit, :additive, allergen_ids: [])
   end
 end

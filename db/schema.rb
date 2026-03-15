@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_14_033405) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_14_125559) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_14_033405) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_allergens_on_name", unique: true
+  end
+
+  create_table "material_allergens", force: :cascade do |t|
+    t.bigint "material_id", null: false
+    t.bigint "allergen_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["allergen_id"], name: "index_material_allergens_on_allergen_id"
+    t.index ["material_id", "allergen_id"], name: "index_material_allergens_on_material_id_and_allergen_id", unique: true
+    t.index ["material_id"], name: "index_material_allergens_on_material_id"
   end
 
   create_table "materials", force: :cascade do |t|
@@ -53,5 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_14_033405) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "material_allergens", "allergens"
+  add_foreign_key "material_allergens", "materials"
   add_foreign_key "materials", "users"
 end

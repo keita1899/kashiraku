@@ -75,6 +75,13 @@ RSpec.describe "Materials", type: :request do
       expect(flash[:notice]).to eq("原材料を登録しました")
     end
 
+    it "アレルゲンを紐づけて登録できる" do
+      allergen = create(:allergen)
+      params = valid_params.deep_merge(material: { allergen_ids: [ allergen.id ] })
+      post materials_path, params: params
+      expect(Material.last.allergens).to include(allergen)
+    end
+
     it "無効なパラメータではエラーが表示される" do
       expect {
         post materials_path, params: { material: { name: "" } }
@@ -113,6 +120,21 @@ RSpec.describe "Materials", type: :request do
       material = create(:material, user: user)
       patch material_path(material), params: { material: { name: "" } }
       expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "アレルゲンを更新できる" do
+      material = create(:material, user: user)
+      allergen = create(:allergen)
+      patch material_path(material), params: { material: { allergen_ids: [ allergen.id ] } }
+      expect(material.reload.allergens).to include(allergen)
+    end
+
+    it "アレルゲンを全て外せる" do
+      allergen = create(:allergen)
+      material = create(:material, user: user)
+      material.allergens << allergen
+      patch material_path(material), params: { material: { allergen_ids: [ "" ] } }
+      expect(material.reload.allergens).to be_empty
     end
 
     it "他人の原材料は更新できない" do
