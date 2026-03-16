@@ -97,5 +97,18 @@ RSpec.describe Material, type: :model do
       user = material.user
       expect { user.destroy }.to change(described_class, :count).by(-1)
     end
+
+    it "アレルゲンを紐づけられる" do
+      material = create(:material)
+      allergen = create(:allergen)
+      material.allergens << allergen
+      expect(material.allergens).to include(allergen)
+    end
+
+    it "原材料を削除すると中間テーブルも削除される" do
+      material = create(:material)
+      material.allergens << create(:allergen)
+      expect { material.destroy }.to change(MaterialAllergen, :count).by(-1)
+    end
   end
 end

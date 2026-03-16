@@ -3,6 +3,8 @@ class Material < ApplicationRecord
   UNIT_PRICE_SCALE = 4
 
   belongs_to :user
+  has_many :material_allergens, dependent: :destroy
+  has_many :allergens, -> { order(required: :desc, id: :asc) }, through: :material_allergens
 
   validates :name, presence: true
   validates :purchase_price, presence: true, numericality: { greater_than: 0 }

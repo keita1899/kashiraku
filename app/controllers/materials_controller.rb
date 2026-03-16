@@ -1,10 +1,11 @@
 class MaterialsController < ApplicationController
   def index
-    @materials = current_user.materials.order(created_at: :desc)
+    @materials = current_user.materials.includes(:allergens).order(created_at: :desc)
   end
 
   def new
     @material = current_user.materials.build
+    set_allergens
   end
 
   def create
@@ -12,12 +13,14 @@ class MaterialsController < ApplicationController
     if @material.save
       redirect_to materials_path, notice: "原材料を登録しました"
     else
+      set_allergens
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     @material = current_user.materials.find(params[:id])
+    set_allergens
   end
 
   def update
@@ -25,6 +28,7 @@ class MaterialsController < ApplicationController
     if @material.update(material_params)
       redirect_to materials_path, notice: "原材料を更新しました"
     else
+      set_allergens
       render :edit, status: :unprocessable_entity
     end
   end
@@ -40,7 +44,12 @@ class MaterialsController < ApplicationController
 
   private
 
+  def set_allergens
+    @required_allergens = Allergen.required_items
+    @recommended_allergens = Allergen.recommended_items
+  end
+
   def material_params
-    params.require(:material).permit(:name, :display_name, :purchase_price, :purchase_quantity, :unit, :additive)
+    params.require(:material).permit(:name, :display_name, :purchase_price, :purchase_quantity, :unit, :additive, allergen_ids: [])
   end
 end
