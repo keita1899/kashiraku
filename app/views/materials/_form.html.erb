@@ -60,11 +60,11 @@
     <div class="mb-3">
       <p class="text-xs font-medium text-gray-500 mb-2">特定原材料（義務）</p>
       <div class="grid grid-cols-3 gap-2">
-        <%= f.collection_check_boxes :allergen_ids, Allergen.required_items.order(:id), :id, :name do |b| %>
-          <label class="inline-flex items-center text-sm cursor-pointer">
+        <%= f.collection_check_boxes :allergen_ids, @required_allergens, :id, :name do |b| %>
+          <%= b.label class: "inline-flex items-center text-sm cursor-pointer" do %>
             <%= b.check_box class: "rounded text-orange-500 focus:ring-orange-500 cursor-pointer" %>
-            <span class="ml-1.5"><%= b.label %></span>
-          </label>
+            <span class="ml-1.5"><%= b.text %></span>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -72,11 +72,11 @@
     <div>
       <p class="text-xs font-medium text-gray-500 mb-2">特定原材料に準ずるもの（推奨）</p>
       <div class="grid grid-cols-3 gap-2">
-        <%= f.collection_check_boxes :allergen_ids, Allergen.recommended_items.order(:id), :id, :name do |b| %>
-          <label class="inline-flex items-center text-sm cursor-pointer">
+        <%= f.collection_check_boxes :allergen_ids, @recommended_allergens, :id, :name do |b| %>
+          <%= b.label class: "inline-flex items-center text-sm cursor-pointer" do %>
             <%= b.check_box class: "rounded text-orange-500 focus:ring-orange-500 cursor-pointer" %>
-            <span class="ml-1.5"><%= b.label %></span>
-          </label>
+            <span class="ml-1.5"><%= b.text %></span>
+          <% end %>
         <% end %>
       </div>
     </div>
