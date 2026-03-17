@@ -1,0 +1,26 @@
+<%= form_with(model: product, class: "space-y-6") do |f| %>
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :name, class: "w-full border #{error_border(f.object, :name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: product, field: :name %>
+  </div>
+
+  <div>
+    <%= f.label :category, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.select :category, Product::CATEGORIES.map { |c| [c, c] },
+        { include_blank: "選択してください" },
+        class: "w-full border #{error_border(f.object, :category)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: product, field: :category %>
+  </div>
+
+  <div>
+    <%= f.label :sales_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.number_field :sales_price, min: 1,
+        class: "w-full border #{error_border(f.object, :sales_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: product, field: :sales_price %>
+  </div>
+
+  <div>
+    <%= f.submit class: "w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>
+  </div>
+<% end %>
