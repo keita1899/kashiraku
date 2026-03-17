@@ -49,6 +49,15 @@ RSpec.describe "Products", type: :request do
       get products_path
       expect(response).to have_http_status(:ok)
     end
+
+    it "自分の商品のみ表示される" do
+      create(:product, user: user, name: "マドレーヌ")
+      create(:product, user: other_user, name: "他人の商品")
+      get products_path
+
+      expect(response.body).to include("マドレーヌ")
+      expect(response.body).not_to include("他人の商品")
+    end
   end
 
   describe "GET /products/new" do
