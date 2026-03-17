@@ -34,6 +34,12 @@ RSpec.describe "Products", type: :request do
       patch product_path(product), params: valid_params
       expect(response).to redirect_to(root_path)
     end
+
+    it "削除しようとするとリダイレクトされる" do
+      product = create(:product, user: user)
+      delete product_path(product)
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "GET /products" do
@@ -108,6 +114,26 @@ RSpec.describe "Products", type: :request do
     it "他人の商品は更新できない" do
       product = create(:product, user: other_user)
       patch product_path(product), params: { product: { name: "フィナンシェ" } }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "DELETE /products/:id" do
+    before { sign_in user }
+
+    it "自分の商品を削除できる" do
+      product = create(:product, user: user)
+      expect {
+        delete product_path(product)
+      }.to change(Product, :count).by(-1)
+      expect(response).to redirect_to(products_path)
+    end
+
+    it "他人の商品は削除できない" do
+      product = create(:product, user: other_user)
+      expect {
+        delete product_path(product)
+      }.not_to change(Product, :count)
       expect(response).to have_http_status(:not_found)
     end
   end
