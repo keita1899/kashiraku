@@ -16,6 +16,19 @@ class ProductsController < ApplicationController
     end
   end
 
+  def edit
+    @product = current_user.products.find(params[:id])
+  end
+
+  def update
+    @product = current_user.products.find(params[:id])
+    if @product.update(product_params)
+      redirect_to products_path, notice: "商品を更新しました"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def product_params

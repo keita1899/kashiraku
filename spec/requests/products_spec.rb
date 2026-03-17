@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Products", type: :request do
   let(:user) { create(:user, provider: "google_oauth2", uid: "123", email: "test@example.com") }
+  let(:other_user) { create(:user, provider: "google_oauth2", uid: "456", email: "other@example.com") }
   let(:valid_params) do
     { product: { name: "マドレーヌ", category: "焼き菓子", sales_price: 350 } }
   end
@@ -19,6 +20,18 @@ RSpec.describe "Products", type: :request do
 
     it "登録しようとするとリダイレクトされる" do
       post products_path, params: valid_params
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "編集ページにアクセスするとリダイレクトされる" do
+      product = create(:product, user: user)
+      get edit_product_path(product)
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "更新しようとするとリダイレクトされる" do
+      product = create(:product, user: user)
+      patch product_path(product), params: valid_params
       expect(response).to redirect_to(root_path)
     end
   end
@@ -57,6 +70,45 @@ RSpec.describe "Products", type: :request do
         post products_path, params: { product: { name: "" } }
       }.not_to change(Product, :count)
       expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  describe "GET /products/:id/edit" do
+    before { sign_in user }
+
+    it "自分の商品の編集フォームが表示される" do
+      product = create(:product, user: user)
+      get edit_product_path(product)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "他人の商品にはアクセスできない" do
+      product = create(:product, user: other_user)
+      get edit_product_path(product)
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe "PATCH /products/:id" do
+    before { sign_in user }
+
+    it "有効なパラメータで商品が更新される" do
+      product = create(:product, user: user)
+      patch product_path(product), params: { product: { name: "フィナンシェ" } }
+      expect(response).to redirect_to(products_path)
+      expect(product.reload.name).to eq("フィナンシェ")
+    end
+
+    it "無効なパラメータではエラーが表示される" do
+      product = create(:product, user: user)
+      patch product_path(product), params: { product: { name: "" } }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "他人の商品は更新できない" do
+      product = create(:product, user: other_user)
+      patch product_path(product), params: { product: { name: "フィナンシェ" } }
+      expect(response).to have_http_status(:not_found)
     end
   end
 end
