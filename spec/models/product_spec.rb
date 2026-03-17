@@ -44,5 +44,18 @@ RSpec.describe Product, type: :model do
       user = product.user
       expect { user.destroy }.to change(described_class, :count).by(-1)
     end
+
+    it "原材料を紐づけられる" do
+      product = create(:product)
+      material = create(:material, user: product.user)
+      create(:product_material, product: product, material: material, quantity: 100)
+      expect(product.materials).to include(material)
+    end
+
+    it "商品を削除すると中間テーブルも削除される" do
+      product_material = create(:product_material)
+      product = product_material.product
+      expect { product.destroy }.to change(ProductMaterial, :count).by(-1)
+    end
   end
 end

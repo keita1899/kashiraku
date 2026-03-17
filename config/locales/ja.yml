@@ -16,6 +16,9 @@ ja:
         name: 商品名
         category: カテゴリ
         sales_price: 販売価格
+      product_material:
+        material: 原材料
+        quantity: 使用量
     errors:
       messages:
         not_saved:
