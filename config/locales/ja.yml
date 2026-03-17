@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       material: 原材料
+      product: 商品
     attributes:
       material:
         name: 原材料名
@@ -11,6 +12,10 @@ ja:
         unit: 単位
         unit_price: 単価
         additive: 添加物
+      product:
+        name: 商品名
+        category: カテゴリ
+        sales_price: 販売価格
     errors:
       messages:
         not_saved:
