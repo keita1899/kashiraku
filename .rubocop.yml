@@ -31,3 +31,6 @@ RSpec/ContextWording:
 RSpec/MultipleExpectations:
   Exclude:
     - "spec/requests/**/*"
+
+RSpec/ExampleLength:
+  Max: 10

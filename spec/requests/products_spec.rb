@@ -100,7 +100,9 @@ RSpec.describe "Products", type: :request do
       nested = { product_materials_attributes: { "0" => { material_id: other_material.id, quantity: 50 } } }
       expect {
         post products_path, params: { product: valid_params[:product].merge(nested) }
-      }.not_to change(ProductMaterial, :count)
+      }.not_to change(Product, :count)
+      expect(ProductMaterial.count).to eq(0)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
@@ -156,6 +158,16 @@ RSpec.describe "Products", type: :request do
       expect {
         patch product_path(pm.product), params: { product: attrs }
       }.to change(ProductMaterial, :count).by(-1)
+    end
+
+    it "他ユーザーの原材料は紐付けできない" do
+      product = create(:product, user: user)
+      other_material = create(:material, user: other_user)
+      nested = { product_materials_attributes: { "0" => { material_id: other_material.id, quantity: 30 } } }
+      expect {
+        patch product_path(product), params: { product: nested }
+      }.not_to change(ProductMaterial, :count)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
