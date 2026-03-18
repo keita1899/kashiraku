@@ -86,6 +86,24 @@ RSpec.describe "Products", type: :request do
       }.not_to change(Product, :count)
       expect(response).to have_http_status(:unprocessable_entity)
     end
+
+    it "原材料と一緒に商品が作成される" do
+      material = create(:material, user: user)
+      nested = { product_materials_attributes: { "0" => { material_id: material.id, quantity: 50 } } }
+      expect {
+        post products_path, params: { product: valid_params[:product].merge(nested) }
+      }.to change(Product, :count).by(1).and change(ProductMaterial, :count).by(1)
+    end
+
+    it "他ユーザーの原材料では商品を作成できない" do
+      other_material = create(:material, user: other_user)
+      nested = { product_materials_attributes: { "0" => { material_id: other_material.id, quantity: 50 } } }
+      expect {
+        post products_path, params: { product: valid_params[:product].merge(nested) }
+      }.not_to change(Product, :count)
+      expect(ProductMaterial.count).to eq(0)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 
   describe "GET /products/:id/edit" do
@@ -124,6 +142,32 @@ RSpec.describe "Products", type: :request do
       product = create(:product, user: other_user)
       patch product_path(product), params: { product: { name: "フィナンシェ" } }
       expect(response).to have_http_status(:not_found)
+    end
+
+    it "原材料を追加できる" do
+      product = create(:product, user: user)
+      nested = { product_materials_attributes: { "0" => { material_id: create(:material, user: user).id, quantity: 30 } } }
+      expect {
+        patch product_path(product), params: { product: nested }
+      }.to change(ProductMaterial, :count).by(1)
+    end
+
+    it "原材料を削除できる" do
+      pm = create(:product_material, product: create(:product, user: user), material: create(:material, user: user))
+      attrs = { product_materials_attributes: { "0" => { id: pm.id, _destroy: true } } }
+      expect {
+        patch product_path(pm.product), params: { product: attrs }
+      }.to change(ProductMaterial, :count).by(-1)
+    end
+
+    it "他ユーザーの原材料は紐付けできない" do
+      product = create(:product, user: user)
+      other_material = create(:material, user: other_user)
+      nested = { product_materials_attributes: { "0" => { material_id: other_material.id, quantity: 30 } } }
+      expect {
+        patch product_path(product), params: { product: nested }
+      }.not_to change(ProductMaterial, :count)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 

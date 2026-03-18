@@ -20,6 +20,37 @@
     <%= render "shared/field_errors", object: product, field: :sales_price %>
   </div>
 
+  <hr class="my-6 border-gray-200">
+
+  <div data-controller="nested-form">
+    <div class="flex justify-between items-center mb-3">
+      <span class="block text-sm font-medium text-gray-700">原材料</span>
+      <button type="button" data-action="nested-form#add"
+          class="text-orange-500 hover:text-orange-700 text-sm font-medium cursor-pointer">
+        + 原材料を追加
+      </button>
+    </div>
+
+    <div class="hidden md:flex items-center gap-3 mb-2 text-xs font-medium text-gray-500">
+      <span class="flex-1">原材料名</span>
+      <span class="w-24">使用量</span>
+      <span class="w-40">用途（任意）</span>
+      <span class="w-5"></span>
+    </div>
+
+    <div data-nested-form-target="container" class="space-y-3">
+      <%= f.fields_for :product_materials do |pm| %>
+        <%= render "product_material_fields", f: pm, materials: @materials %>
+      <% end %>
+    </div>
+
+    <template data-nested-form-target="template">
+      <%= f.fields_for :product_materials, ProductMaterial.new, child_index: "NEW_RECORD" do |pm| %>
+        <%= render "product_material_fields", f: pm, materials: @materials %>
+      <% end %>
+    </template>
+  </div>
+
   <div>
     <%= f.submit class: "w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>
   </div>

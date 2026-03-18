@@ -1,0 +1,37 @@
+<div class="nested-fields relative border border-gray-200 rounded-lg p-3 md:border-0 md:p-0">
+  <%= f.hidden_field :_destroy %>
+  <div class="flex justify-end md:hidden mb-1">
+    <button type="button" data-action="nested-form#remove" class="text-sm text-red-500 hover:text-red-700 cursor-pointer">削除</button>
+  </div>
+  <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+    <div class="flex-1">
+      <span class="block text-xs text-gray-500 mb-1 md:hidden">原材料名</span>
+      <%= f.select :material_id, materials.map { |m| ["#{m.name}（#{m.unit} / ¥#{m.unit_price}）", m.id] },
+          { include_blank: "原材料を選択" },
+          class: "w-full border #{error_border(f.object, :material)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    </div>
+    <div class="flex gap-2 md:contents">
+      <div class="flex-1 md:w-24 md:flex-none">
+        <span class="block text-xs text-gray-500 mb-1 md:hidden">使用量</span>
+        <%= f.number_field :quantity, step: 0.01, min: 0, placeholder: "使用量",
+            class: "w-full border #{error_border(f.object, :quantity)} rounded-lg px-3 py-2 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+      <div class="flex-1 md:w-40 md:flex-none">
+        <span class="block text-xs text-gray-500 mb-1 md:hidden">用途（任意）</span>
+        <%= f.text_field :note, placeholder: "例: シュー生地",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      </div>
+      <div class="hidden md:flex items-center">
+        <button type="button" data-action="nested-form#remove" class="text-gray-400 hover:text-red-500 cursor-pointer" title="削除">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row md:gap-4">
+    <%= render "shared/field_errors", object: f.object, field: :material %>
+    <%= render "shared/field_errors", object: f.object, field: :quantity %>
+  </div>
+</div>

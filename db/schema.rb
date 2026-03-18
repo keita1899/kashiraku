@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_16_102852) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_17_103738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_16_102852) do
     t.index ["user_id"], name: "index_materials_on_user_id"
   end
 
+  create_table "product_materials", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "material_id", null: false
+    t.decimal "quantity", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "note"
+    t.index ["material_id"], name: "index_product_materials_on_material_id"
+    t.index ["product_id"], name: "index_product_materials_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
     t.string "category", null: false
@@ -76,5 +87,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_16_102852) do
   add_foreign_key "material_allergens", "allergens"
   add_foreign_key "material_allergens", "materials"
   add_foreign_key "materials", "users"
+  add_foreign_key "product_materials", "materials"
+  add_foreign_key "product_materials", "products"
   add_foreign_key "products", "users"
 end

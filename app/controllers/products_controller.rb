@@ -5,6 +5,8 @@ class ProductsController < ApplicationController
 
   def new
     @product = current_user.products.build
+    @product.product_materials.build
+    set_materials
   end
 
   def create
@@ -12,12 +14,14 @@ class ProductsController < ApplicationController
     if @product.save
       redirect_to products_path, notice: "商品を登録しました"
     else
+      set_materials
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     @product = current_user.products.find(params[:id])
+    set_materials
   end
 
   def update
@@ -25,6 +29,7 @@ class ProductsController < ApplicationController
     if @product.update(product_params)
       redirect_to products_path, notice: "商品を更新しました"
     else
+      set_materials
       render :edit, status: :unprocessable_entity
     end
   end
@@ -40,7 +45,14 @@ class ProductsController < ApplicationController
 
   private
 
+  def set_materials
+    @materials = current_user.materials.order(:name)
+  end
+
   def product_params
-    params.require(:product).permit(:name, :category, :sales_price)
+    params.require(:product).permit(
+      :name, :category, :sales_price,
+      product_materials_attributes: [ :id, :material_id, :quantity, :note, :_destroy ]
+    )
   end
 end
