@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :product_material do
     product
-    material
+    material { association :material, user: product.user }
     quantity { 100 }
   end
 end

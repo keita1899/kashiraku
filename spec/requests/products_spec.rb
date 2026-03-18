@@ -94,6 +94,14 @@ RSpec.describe "Products", type: :request do
         post products_path, params: { product: valid_params[:product].merge(nested) }
       }.to change(Product, :count).by(1).and change(ProductMaterial, :count).by(1)
     end
+
+    it "他ユーザーの原材料では商品を作成できない" do
+      other_material = create(:material, user: other_user)
+      nested = { product_materials_attributes: { "0" => { material_id: other_material.id, quantity: 50 } } }
+      expect {
+        post products_path, params: { product: valid_params[:product].merge(nested) }
+      }.not_to change(ProductMaterial, :count)
+    end
   end
 
   describe "GET /products/:id/edit" do
