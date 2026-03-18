@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   belongs_to :user
   has_many :product_materials, dependent: :destroy
   has_many :materials, through: :product_materials
+  accepts_nested_attributes_for :product_materials, allow_destroy: true
 
   validates :name, presence: true
   validates :category, presence: true, inclusion: { in: CATEGORIES }

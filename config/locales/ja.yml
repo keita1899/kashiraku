@@ -19,6 +19,7 @@ ja:
       product_material:
         material: 原材料
         quantity: 使用量
+        note: 用途
     errors:
       messages:
         not_saved:
