@@ -1,0 +1,29 @@
+<div class="bg-white rounded-xl shadow-sm p-6 mb-6" data-cost-calculator-target="summary">
+  <div class="flex items-center gap-3 mb-4">
+    <div class="flex-1 bg-gray-50 rounded-lg p-4 text-center">
+      <p class="text-xs text-gray-500 mb-1">販売価格</p>
+      <p class="text-lg font-bold text-gray-900" data-cost-calculator-target="salesPriceDisplay"><%= number_to_currency(product.sales_price || 0, unit: "¥", precision: 0, format: "%u%n") %></p>
+    </div>
+    <span class="text-xl text-gray-400">&minus;</span>
+    <div class="flex-1 bg-gray-50 rounded-lg p-4 text-center">
+      <p class="text-xs text-gray-500 mb-1">材料費合計</p>
+      <p class="text-lg font-bold text-gray-900" data-cost-calculator-target="totalCost"><%= number_to_currency(product.total_cost, unit: "¥", precision: 0, format: "%u%n") %></p>
+    </div>
+    <span class="text-xl text-gray-400">=</span>
+    <div class="flex-1 bg-gray-50 rounded-lg p-4 text-center">
+      <p class="text-xs text-gray-500 mb-1">粗利</p>
+      <p class="text-lg font-bold text-gray-900" data-cost-calculator-target="grossProfit"><%= number_to_currency(product.gross_profit, unit: "¥", precision: 0, format: "%u%n") %></p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <div class="flex-1 bg-gray-50 rounded-lg p-4 text-center">
+      <p class="text-xs text-gray-500 mb-1">原価率</p>
+      <p class="text-lg font-bold text-gray-900" data-cost-calculator-target="costRate"><%= product.cost_rate %>%</p>
+    </div>
+    <div class="flex-1 bg-gray-50 rounded-lg p-4 text-center">
+      <p class="text-xs text-gray-500 mb-1">利益率</p>
+      <p class="text-lg font-bold text-gray-900" data-cost-calculator-target="profitRate"><%= product.profit_rate %>%</p>
+    </div>
+  </div>
+</div>

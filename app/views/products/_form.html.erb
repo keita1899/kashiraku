@@ -1,23 +1,26 @@
-<%= form_with(model: product, class: "space-y-6") do |f| %>
+<%= form_with(model: product, class: "space-y-6", data: { controller: "cost-calculator" }) do |f| %>
   <div>
     <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
     <%= f.text_field :name, class: "w-full border #{error_border(f.object, :name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
     <%= render "shared/field_errors", object: product, field: :name %>
   </div>
 
-  <div>
-    <%= f.label :category, class: "block text-sm font-medium text-gray-700 mb-1" %>
-    <%= f.select :category, Product::CATEGORIES.map { |c| [c, c] },
-        { include_blank: "選択してください" },
-        class: "w-full border #{error_border(f.object, :category)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
-    <%= render "shared/field_errors", object: product, field: :category %>
-  </div>
+  <div class="flex flex-col md:flex-row gap-6">
+    <div class="md:w-3/5">
+      <%= f.label :category, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :category, Product::CATEGORIES.map { |c| [c, c] },
+          { include_blank: "選択してください" },
+          class: "w-full border #{error_border(f.object, :category)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: product, field: :category %>
+    </div>
 
-  <div>
-    <%= f.label :sales_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
-    <%= f.number_field :sales_price, min: 1,
-        class: "w-full border #{error_border(f.object, :sales_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
-    <%= render "shared/field_errors", object: product, field: :sales_price %>
+    <div class="md:w-2/5">
+      <%= f.label :sales_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :sales_price, min: 1,
+          data: { cost_calculator_target: "salesPrice", action: "input->cost-calculator#recalculate" },
+          class: "w-full border #{error_border(f.object, :sales_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <%= render "shared/field_errors", object: product, field: :sales_price %>
+    </div>
   </div>
 
   <hr class="my-6 border-gray-200">
@@ -34,11 +37,13 @@
     <div class="hidden md:flex items-center gap-3 mb-2 text-xs font-medium text-gray-500">
       <span class="flex-1">原材料名</span>
       <span class="w-24">使用量</span>
-      <span class="w-40">用途（任意）</span>
+      <span class="flex-1">用途（任意）</span>
+      <span class="w-24">小計</span>
       <span class="w-5"></span>
     </div>
 
-    <div data-nested-form-target="container" class="space-y-3">
+    <div data-nested-form-target="container" class="space-y-3"
+         data-action="change->cost-calculator#recalculate input->cost-calculator#recalculate">
       <%= f.fields_for :product_materials do |pm| %>
         <%= render "product_material_fields", f: pm, materials: @materials %>
       <% end %>
@@ -50,6 +55,8 @@
       <% end %>
     </template>
   </div>
+
+  <%= render "cost_summary", product: product %>
 
   <div>
     <%= f.submit class: "w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>

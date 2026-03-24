@@ -13,6 +13,7 @@
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">商品名</th>
           <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">カテゴリ</th>
           <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">販売価格</th>
+          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">原価率</th>
           <th class="w-10"></th>
           <th class="w-10"></th>
         </tr>
@@ -22,7 +23,8 @@
           <tr>
             <td class="px-4 py-3 text-sm text-gray-900"><%= product.name %></td>
             <td class="px-4 py-3 text-sm text-gray-700"><%= product.category %></td>
-            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(product.sales_price, unit: "¥", precision: 0) %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(product.sales_price, unit: "¥", precision: 0, format: "%u%n") %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= product.cost_rate %>%</td>
             <td class="px-4 py-3 text-center">
               <%= link_to edit_product_path(product), class: "text-gray-400 hover:text-orange-500", title: "編集" do %>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
