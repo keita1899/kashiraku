@@ -26,7 +26,7 @@ class Product < ApplicationRecord
 
     sales_price - total_cost
   end
-  
+
   def profit_rate
     return 0 if sales_price.blank? || sales_price.zero?
 
