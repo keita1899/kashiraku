@@ -14,7 +14,7 @@ class MaterialsController < ApplicationController
       redirect_to materials_path, notice: "原材料を登録しました"
     else
       set_allergens
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class MaterialsController < ApplicationController
       redirect_to materials_path, notice: "原材料を更新しました"
     else
       set_allergens
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

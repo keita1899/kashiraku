@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
       redirect_to products_path, notice: "商品を登録しました"
     else
       set_materials
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -30,7 +30,7 @@ class ProductsController < ApplicationController
       redirect_to products_path, notice: "商品を更新しました"
     else
       set_materials
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
