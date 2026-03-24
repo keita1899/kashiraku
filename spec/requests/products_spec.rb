@@ -58,6 +58,15 @@ RSpec.describe "Products", type: :request do
       expect(response.body).to include("マドレーヌ")
       expect(response.body).not_to include("他人の商品")
     end
+
+    it "原価率が表示される" do
+      material = create(:material, user: user, purchase_price: 500, purchase_quantity: 1000)
+      product = create(:product, user: user, sales_price: 350)
+      create(:product_material, product: product, material: material, quantity: 100)
+      get products_path
+
+      expect(response.body).to include("14.3%")
+    end
   end
 
   describe "GET /products/new" do
@@ -84,7 +93,7 @@ RSpec.describe "Products", type: :request do
       expect {
         post products_path, params: { product: { name: "" } }
       }.not_to change(Product, :count)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "原材料と一緒に商品が作成される" do
@@ -102,7 +111,7 @@ RSpec.describe "Products", type: :request do
         post products_path, params: { product: valid_params[:product].merge(nested) }
       }.not_to change(Product, :count)
       expect(ProductMaterial.count).to eq(0)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -120,6 +129,27 @@ RSpec.describe "Products", type: :request do
       get edit_product_path(product)
       expect(response).to have_http_status(:not_found)
     end
+
+    it "原価情報が表示される" do
+      material = create(:material, user: user, purchase_price: 500, purchase_quantity: 1000)
+      product = create(:product, user: user, sales_price: 350)
+      create(:product_material, product: product, material: material, quantity: 100)
+      get edit_product_path(product)
+
+      expect(response.body).to include("販売価格")
+      expect(response.body).to include("材料費合計")
+      expect(response.body).to include("原価率")
+      expect(response.body).to include("粗利")
+      expect(response.body).to include("利益率")
+    end
+
+    it "原材料がなくても原価情報が表示される" do
+      product = create(:product, user: user)
+      get edit_product_path(product)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("材料費合計")
+    end
   end
 
   describe "PATCH /products/:id" do
@@ -135,7 +165,7 @@ RSpec.describe "Products", type: :request do
     it "無効なパラメータではエラーが表示される" do
       product = create(:product, user: user)
       patch product_path(product), params: { product: { name: "" } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "他人の商品は更新できない" do
@@ -167,7 +197,7 @@ RSpec.describe "Products", type: :request do
       expect {
         patch product_path(product), params: { product: nested }
       }.not_to change(ProductMaterial, :count)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

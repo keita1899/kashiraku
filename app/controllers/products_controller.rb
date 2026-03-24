@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   def index
-    @products = current_user.products.order(created_at: :desc)
+    @products = current_user.products.includes(product_materials: :material).order(created_at: :desc)
   end
 
   def new
@@ -15,22 +15,22 @@ class ProductsController < ApplicationController
       redirect_to products_path, notice: "商品を登録しました"
     else
       set_materials
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
   def edit
-    @product = current_user.products.find(params[:id])
+    @product = current_user.products.includes(product_materials: :material).find(params[:id])
     set_materials
   end
 
   def update
-    @product = current_user.products.find(params[:id])
+    @product = current_user.products.includes(product_materials: :material).find(params[:id])
     if @product.update(product_params)
       redirect_to products_path, notice: "商品を更新しました"
     else
       set_materials
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

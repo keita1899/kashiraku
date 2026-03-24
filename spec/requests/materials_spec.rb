@@ -86,7 +86,7 @@ RSpec.describe "Materials", type: :request do
       expect {
         post materials_path, params: { material: { name: "" } }
       }.not_to change(Material, :count)
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 
@@ -119,7 +119,7 @@ RSpec.describe "Materials", type: :request do
     it "無効なパラメータではエラーが表示される" do
       material = create(:material, user: user)
       patch material_path(material), params: { material: { name: "" } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "アレルゲンを更新できる" do
