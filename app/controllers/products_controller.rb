@@ -20,12 +20,12 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @product = current_user.products.includes(product_materials: :material).find(params[:id])
+    @product = current_user.products.includes(:allergens, product_materials: :material).find(params[:id])
     set_materials
   end
 
   def update
-    @product = current_user.products.includes(product_materials: :material).find(params[:id])
+    @product = current_user.products.includes(:allergens, product_materials: :material).find(params[:id])
     if @product.update(product_params)
       redirect_to products_path, notice: "商品を更新しました"
     else
