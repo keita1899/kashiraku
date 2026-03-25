@@ -59,6 +59,62 @@ RSpec.describe Product, type: :model do
     end
   end
 
+  describe "アレルゲン集約" do
+    let(:product) { create(:product) }
+    let(:egg) { create(:allergen, :required, name: "卵") }
+    let(:milk) { create(:allergen, :required, name: "乳") }
+    let(:orange) { create(:allergen, name: "オレンジ") }
+
+    before do
+      material_a = create(:material, user: product.user)
+      material_a.allergens << [ egg, milk ]
+      material_b = create(:material, user: product.user)
+      material_b.allergens << [ milk, orange ]
+      create(:product_material, product: product, material: material_a, quantity: 100)
+      create(:product_material, product: product, material: material_b, quantity: 50)
+    end
+
+    it "紐づく原材料のアレルゲンを重複なしで取得できる" do
+      expect(product.allergens).to contain_exactly(egg, milk, orange)
+    end
+
+    it "特定原材料のみ取得できる" do
+      expect(product.required_allergens).to contain_exactly(egg, milk)
+    end
+
+    it "推奨品目のみ取得できる" do
+      expect(product.recommended_allergens).to contain_exactly(orange)
+    end
+
+    it "特定原材料が推奨品目より先に並ぶ" do
+      allergens = product.allergens.to_a
+      required_index = allergens.index(egg)
+      recommended_index = allergens.index(orange)
+      expect(required_index).to be < recommended_index
+    end
+
+    context "原材料が0件の場合" do
+      let(:empty_product) { create(:product) }
+
+      it "空の結果を返す" do
+        expect(empty_product.allergens).to be_empty
+      end
+    end
+
+    context "原材料がアレルゲンを持たない場合" do
+      let(:no_allergen_product) { create(:product) }
+
+      before do
+        material = create(:material, user: no_allergen_product.user)
+        create(:product_material, product: no_allergen_product, material: material, quantity: 100)
+      end
+
+      it "空の結果を返す" do
+        expect(no_allergen_product.allergens).to be_empty
+      end
+    end
+  end
+
   describe "原価計算" do
     let(:product) { create(:product, sales_price: 500) }
     let(:material_a) { create(:material, user: product.user, purchase_price: 1000, purchase_quantity: 500, unit: "g") }

@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   def index
-    @products = current_user.products.includes(product_materials: :material).order(created_at: :desc)
+    @products = current_user.products.includes(:allergens, product_materials: :material).order(created_at: :desc)
   end
 
   def new
@@ -20,12 +20,12 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @product = current_user.products.includes(product_materials: :material).find(params[:id])
+    @product = current_user.products.includes(:allergens, product_materials: :material).find(params[:id])
     set_materials
   end
 
   def update
-    @product = current_user.products.includes(product_materials: :material).find(params[:id])
+    @product = current_user.products.includes(:allergens, product_materials: :material).find(params[:id])
     if @product.update(product_params)
       redirect_to products_path, notice: "商品を更新しました"
     else
@@ -46,7 +46,7 @@ class ProductsController < ApplicationController
   private
 
   def set_materials
-    @materials = current_user.materials.order(:name)
+    @materials = current_user.materials.includes(:allergens).order(:name)
   end
 
   def product_params

@@ -67,6 +67,17 @@ RSpec.describe "Products", type: :request do
 
       expect(response.body).to include("14.3%")
     end
+
+    it "アレルゲンが表示される" do
+      egg = create(:allergen, :required, name: "卵")
+      material = create(:material, user: user)
+      material.allergens << egg
+      product = create(:product, user: user)
+      create(:product_material, product: product, material: material, quantity: 100)
+      get products_path
+
+      expect(response.body).to include("卵")
+    end
   end
 
   describe "GET /products/new" do
@@ -75,6 +86,21 @@ RSpec.describe "Products", type: :request do
     it "登録フォームが表示される" do
       get new_product_path
       expect(response).to have_http_status(:ok)
+    end
+
+    it "アレルゲンがない場合はメッセージが表示される" do
+      get new_product_path
+      expect(response.body).to include("該当するアレルゲンはありません")
+    end
+
+    it "原材料のセレクトにアレルゲン情報が含まれる" do
+      egg = create(:allergen, :required, name: "卵")
+      material = create(:material, user: user, name: "薄力粉")
+      material.allergens << egg
+      get new_product_path
+
+      expect(response.body).to include("data-allergens")
+      expect(response.body).to include("卵")
     end
   end
 
@@ -149,6 +175,24 @@ RSpec.describe "Products", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("材料費合計")
+    end
+
+    it "アレルゲンが特定原材料と推奨品目に分かれて表示される" do
+      material = create(:material, user: user)
+      material.allergens << [ create(:allergen, :required, name: "卵"), create(:allergen, name: "オレンジ") ]
+      product = create(:product, user: user)
+      create(:product_material, product: product, material: material, quantity: 100)
+      get edit_product_path(product)
+
+      expect(response.body).to include("特定原材料", "卵")
+      expect(response.body).to include("推奨品目", "オレンジ")
+    end
+
+    it "アレルゲンがない場合はメッセージが表示される" do
+      product = create(:product, user: user)
+      get edit_product_path(product)
+
+      expect(response.body).to include("該当するアレルゲンはありません")
     end
   end
 

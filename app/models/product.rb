@@ -4,11 +4,21 @@ class Product < ApplicationRecord
   belongs_to :user
   has_many :product_materials, dependent: :destroy
   has_many :materials, through: :product_materials
+  has_many :material_allergens, through: :materials
+  has_many :allergens, -> { distinct.order(required: :desc, id: :asc) }, through: :material_allergens
   accepts_nested_attributes_for :product_materials, allow_destroy: true
 
   validates :name, presence: true
   validates :category, presence: true, inclusion: { in: CATEGORIES }
   validates :sales_price, presence: true, numericality: { greater_than: 0 }
+
+  def required_allergens
+    allergens.where(required: true)
+  end
+
+  def recommended_allergens
+    allergens.where(required: false)
+  end
 
   def total_cost
     product_materials.sum(&:subtotal)
