@@ -176,20 +176,16 @@ RSpec.describe "Products", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("材料費合計")
     end
-    
+
     it "アレルゲンが特定原材料と推奨品目に分かれて表示される" do
-      egg = create(:allergen, :required, name: "卵")
-      orange = create(:allergen, name: "オレンジ")
       material = create(:material, user: user)
-      material.allergens << [egg, orange]
+      material.allergens << [ create(:allergen, :required, name: "卵"), create(:allergen, name: "オレンジ") ]
       product = create(:product, user: user)
       create(:product_material, product: product, material: material, quantity: 100)
       get edit_product_path(product)
 
-      expect(response.body).to include("特定原材料")
-      expect(response.body).to include("卵")
-      expect(response.body).to include("推奨品目")
-      expect(response.body).to include("オレンジ")
+      expect(response.body).to include("特定原材料", "卵")
+      expect(response.body).to include("推奨品目", "オレンジ")
     end
 
     it "アレルゲンがない場合はメッセージが表示される" do
