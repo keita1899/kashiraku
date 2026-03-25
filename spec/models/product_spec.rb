@@ -67,9 +67,9 @@ RSpec.describe Product, type: :model do
 
     before do
       material_a = create(:material, user: product.user)
-      material_a.allergens << [egg, milk]
+      material_a.allergens << [ egg, milk ]
       material_b = create(:material, user: product.user)
-      material_b.allergens << [milk, orange]
+      material_b.allergens << [ milk, orange ]
       create(:product_material, product: product, material: material_a, quantity: 100)
       create(:product_material, product: product, material: material_b, quantity: 50)
     end

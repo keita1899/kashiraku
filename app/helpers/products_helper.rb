@@ -6,7 +6,7 @@ module ProductsHelper
         "data-unit-price" => m.unit_price.to_f,
         "data-allergens" => m.allergens.map { |a| { name: a.name, required: a.required? } }.to_json
       }
-      [label, m.id, data]
+      [ label, m.id, data ]
     end
   end
 end
