@@ -4,6 +4,10 @@ export default class extends Controller {
   static targets = ["modal", "input", "submit"]
   static values = { keyword: String }
 
+  disconnect() {
+    document.body.style.overflow = ""
+  }
+
   open() {
     this.modalTarget.classList.remove("hidden")
     document.body.style.overflow = "hidden"

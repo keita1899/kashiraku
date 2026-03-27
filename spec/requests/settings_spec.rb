@@ -23,6 +23,17 @@ RSpec.describe "Settings", type: :request do
       end
     end
 
+    context "ゲストユーザーログイン時" do
+      let(:guest) { create(:user, provider: "guest", uid: "guest_123") }
+
+      before { sign_in guest }
+
+      it "アカウント削除不可のメッセージが表示される" do
+        get settings_path
+        expect(response.body).to include("ゲストアカウントは削除できません")
+      end
+    end
+
     context "未ログイン時" do
       it "リダイレクトされる" do
         get settings_path
