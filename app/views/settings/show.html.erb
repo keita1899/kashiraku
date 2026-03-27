@@ -1,0 +1,59 @@
+<div class="max-w-lg mx-auto">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">設定</h1>
+
+  <div class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">アカウント情報</h2>
+    <dl class="space-y-3 text-sm">
+      <div class="flex justify-between">
+        <dt class="text-gray-500 shrink-0">名前</dt>
+        <dd class="text-gray-900 break-all text-right"><%= current_user.display_name %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-gray-500 shrink-0 mr-4">メールアドレス</dt>
+        <dd class="text-gray-900 break-all text-right"><%= current_user.email %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+    <h2 class="text-lg font-bold text-red-600 mb-2">アカウント削除</h2>
+    <% if current_user.guest? %>
+      <p class="text-sm text-gray-500 mb-4">ゲストアカウントは削除できません。ゲストのデータはログアウト時に自動で破棄されます。</p>
+      <div class="text-right">
+        <button type="button" disabled class="bg-gray-300 text-white px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">アカウントを削除する</button>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500 mb-4">アカウントを削除すると、登録した原材料・商品などすべてのデータが完全に削除されます。この操作は取り消せません。</p>
+      <div data-controller="confirm-modal" data-confirm-modal-keyword-value="削除">
+        <div class="text-right">
+          <button type="button" data-action="confirm-modal#open"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium cursor-pointer">
+            アカウントを削除する
+          </button>
+        </div>
+
+        <div data-confirm-modal-target="modal" data-action="click->confirm-modal#backdropClose keydown@window->confirm-modal#closeOnEscape"
+          class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">アカウント削除の確認</h3>
+            <p class="text-sm text-gray-600 mb-4">この操作は取り消せません。すべてのデータが完全に削除されます。</p>
+            <p class="text-sm text-gray-700 mb-2">確認のため「<span class="font-bold text-red-600">削除</span>」と入力してください。</p>
+            <input type="text" data-confirm-modal-target="input" data-action="input->confirm-modal#verify keydown.enter->confirm-modal#verify"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              placeholder="削除" autocomplete="off">
+            <div class="flex justify-end gap-3">
+              <button type="button" data-action="confirm-modal#close"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer">
+                キャンセル
+              </button>
+              <%= button_to "アカウントを削除する", account_path, method: :delete,
+                  class: "bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer",
+                  disabled: true,
+                  data: { confirm_modal_target: "submit" } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
