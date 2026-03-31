@@ -115,6 +115,101 @@ RSpec.describe Product, type: :model do
     end
   end
 
+  describe "栄養成分計算" do
+    let(:product) { create(:product, sales_price: 500) }
+    let(:material_a) do
+      create(:material, :with_nutrition, user: product.user,
+        purchase_price: 1000, purchase_quantity: 500, unit: "g",
+        energy: 349, protein: 8.3, fat: 1.5, carbohydrate: 75.8, salt: 0)
+    end
+    let(:material_b) do
+      create(:material, :with_nutrition, user: product.user,
+        purchase_price: 300, purchase_quantity: 1000, unit: "g",
+        energy: 720, protein: 0.5, fat: 81.0, carbohydrate: 0.2, salt: 1.9)
+    end
+
+    before do
+      create(:product_material, product: product, material: material_a, quantity: 200)
+      create(:product_material, product: product, material: material_b, quantity: 100)
+    end
+
+    it "エネルギー合計を計算できる" do
+      # 349*200/100 + 720*100/100 = 698 + 720 = 1418
+      expect(product.total_energy).to eq(1418.0)
+    end
+
+    it "たんぱく質合計を計算できる" do
+      # 8.3*200/100 + 0.5*100/100 = 16.6 + 0.5 = 17.1
+      expect(product.total_protein).to eq(17.1)
+    end
+
+    it "脂質合計を計算できる" do
+      # 1.5*200/100 + 81.0*100/100 = 3.0 + 81.0 = 84.0
+      expect(product.total_fat).to eq(84.0)
+    end
+
+    it "炭水化物合計を計算できる" do
+      # 75.8*200/100 + 0.2*100/100 = 151.6 + 0.2 = 151.8
+      expect(product.total_carbohydrate).to eq(151.8)
+    end
+
+    it "食塩相当量合計を計算できる" do
+      # 0*200/100 + 1.9*100/100 = 0 + 1.9 = 1.9
+      expect(product.total_salt).to eq(1.9)
+    end
+
+    it "総重量を計算できる" do
+      expect(product.total_weight).to eq(300)
+    end
+
+    it "100gあたりの栄養成分を計算できる" do
+      # 1418*100/300 = 472.7
+      expect(product.nutrition_per_100g(:energy)).to eq(472.7)
+    end
+
+    it "100gあたりの食塩相当量を計算できる" do
+      # 1.9*100/300 = 0.6
+      expect(product.nutrition_per_100g(:salt)).to eq(0.6)
+    end
+
+    it "不正なフィールド名でArgumentErrorが発生する" do
+      expect { product.nutrition_per_100g(:invalid) }.to raise_error(ArgumentError)
+    end
+
+    it "栄養データがあればhas_nutrition_data?がtrueを返す" do
+      expect(product.has_nutrition_data?).to be true
+    end
+
+    context "原材料が0件の場合" do
+      let(:empty_product) { create(:product) }
+
+      it "栄養成分合計が0になる" do
+        expect(empty_product.total_energy).to eq(0)
+      end
+
+      it "100gあたりが0になる" do
+        expect(empty_product.nutrition_per_100g(:energy)).to eq(0)
+      end
+    end
+
+    context "原材料に栄養データがない場合" do
+      let(:no_nutrition_product) { create(:product) }
+
+      before do
+        material = create(:material, user: no_nutrition_product.user)
+        create(:product_material, product: no_nutrition_product, material: material, quantity: 100)
+      end
+
+      it "栄養成分合計が0になる" do
+        expect(no_nutrition_product.total_energy).to eq(0)
+      end
+
+      it "has_nutrition_data?がfalseを返す" do
+        expect(no_nutrition_product.has_nutrition_data?).to be false
+      end
+    end
+  end
+
   describe "原価計算" do
     let(:product) { create(:product, sales_price: 500) }
     let(:material_a) { create(:material, user: product.user, purchase_price: 1000, purchase_quantity: 500, unit: "g") }

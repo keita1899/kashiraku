@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  include NutritionCalculatable
+  include CostCalculatable
+
   CATEGORIES = %w[焼き菓子 生菓子 チョコレート パン 和菓子 アイス・冷菓 ドリンク その他].freeze
 
   belongs_to :user
@@ -18,29 +21,5 @@ class Product < ApplicationRecord
 
   def recommended_allergens
     allergens.where(required: false)
-  end
-
-  def total_cost
-    product_materials.sum(&:subtotal)
-  end
-
-  def cost_rate
-    return 0 if sales_price.blank? || sales_price.zero?
-
-    rate = (total_cost / sales_price * 100).round(1)
-    rate % 1 == 0 ? rate.to_i : rate
-  end
-
-  def gross_profit
-    return 0 if sales_price.blank?
-
-    sales_price - total_cost
-  end
-
-  def profit_rate
-    return 0 if sales_price.blank? || sales_price.zero?
-
-    rate = (gross_profit / sales_price * 100).round(1)
-    rate % 1 == 0 ? rate.to_i : rate
   end
 end
