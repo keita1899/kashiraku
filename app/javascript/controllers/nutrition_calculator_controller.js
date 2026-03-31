@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
+const NUTRITION_FIELDS = ["energy", "protein", "fat", "carbohydrate", "salt"]
+
 export default class extends Controller {
   static targets = [
     "row", "destroy", "materialSelect", "quantity",
@@ -24,8 +26,7 @@ export default class extends Controller {
   }
 
   collectNutrition() {
-    const fields = ["energy", "protein", "fat", "carbohydrate", "salt"]
-    const totals = { energy: 0, protein: 0, fat: 0, carbohydrate: 0, salt: 0 }
+    const totals = Object.fromEntries(NUTRITION_FIELDS.map(f => [f, 0]))
     let totalWeight = 0
     let hasNutrition = false
 
@@ -38,7 +39,7 @@ export default class extends Controller {
       const quantity = parseFloat(this.quantityTargets[index]?.value) || 0
       totalWeight += quantity
 
-      fields.forEach(field => {
+      NUTRITION_FIELDS.forEach(field => {
         const raw = option.dataset[field]
         if (raw === "") return
         const value = parseFloat(raw) || 0
@@ -66,8 +67,7 @@ export default class extends Controller {
       this.carbohydratePer100gTarget.textContent = this.formatValue(totals.carbohydrate * 100 / totalWeight, "g")
       this.saltPer100gTarget.textContent = this.formatValue(totals.salt * 100 / totalWeight, "g")
     } else {
-      const fields = ["energyPer100g", "proteinPer100g", "fatPer100g", "carbohydratePer100g", "saltPer100g"]
-      fields.forEach(f => { this[`${f}Target`].textContent = "-" })
+      NUTRITION_FIELDS.forEach(f => { this[`${f}Per100gTarget`].textContent = "-" })
     }
 
     this.summaryTarget.classList.toggle("hidden", !hasNutrition)
