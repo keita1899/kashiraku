@@ -1,0 +1,70 @@
+<div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+  <div class="flex justify-between items-center mb-3">
+    <p class="text-sm font-medium text-gray-700">栄養成分表示</p>
+    <button type="button"
+      data-nutrition-calculator-target="toggleButton"
+      data-action="nutrition-calculator#toggleDisplay"
+      class="text-orange-500 hover:text-orange-700 text-sm font-medium cursor-pointer">
+      100gあたりに切替
+    </button>
+  </div>
+
+  <div data-nutrition-calculator-target="summary" class="<%= 'hidden' unless product.has_nutrition_data? %>">
+    <div data-nutrition-calculator-target="perItemSection">
+      <p class="text-xs text-gray-500 mb-2">1個あたり</p>
+      <div class="grid grid-cols-5 gap-2">
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">エネルギー</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="energy"><%= product.total_energy.round(1) %>kcal</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">たんぱく質</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="protein"><%= product.total_protein.round(1) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">脂質</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="fat"><%= product.total_fat.round(1) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">炭水化物</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="carbohydrate"><%= product.total_carbohydrate.round(1) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">食塩相当量</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="salt"><%= product.total_salt.round(1) %>g</p>
+        </div>
+      </div>
+    </div>
+
+    <div data-nutrition-calculator-target="per100gSection" class="hidden">
+      <p class="text-xs text-gray-500 mb-2">100gあたり</p>
+      <div class="grid grid-cols-5 gap-2">
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">エネルギー</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="energyPer100g"><%= product.nutrition_per_100g(:energy) %>kcal</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">たんぱく質</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="proteinPer100g"><%= product.nutrition_per_100g(:protein) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">脂質</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="fatPer100g"><%= product.nutrition_per_100g(:fat) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">炭水化物</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="carbohydratePer100g"><%= product.nutrition_per_100g(:carbohydrate) %>g</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3 text-center">
+          <p class="text-xs text-gray-500 mb-1">食塩相当量</p>
+          <p class="text-sm font-bold text-gray-900" data-nutrition-calculator-target="saltPer100g"><%= product.nutrition_per_100g(:salt) %>g</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p data-nutrition-calculator-target="emptyMessage"
+     class="text-sm text-gray-400 <%= 'hidden' if product.has_nutrition_data? %>">
+    栄養成分データがありません
+  </p>
+</div>
