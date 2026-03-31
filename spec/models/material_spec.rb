@@ -91,6 +91,25 @@ RSpec.describe Material, type: :model do
     end
   end
 
+  describe "栄養成分バリデーション" do
+    it "栄養成分がnilでも有効" do
+      material = build(:material, energy: nil, protein: nil, fat: nil, carbohydrate: nil, salt: nil)
+      expect(material).to be_valid
+    end
+
+    it "栄養成分が0でも有効" do
+      material = build(:material, energy: 0, protein: 0, fat: 0, carbohydrate: 0, salt: 0)
+      expect(material).to be_valid
+    end
+
+    %i[energy protein fat carbohydrate salt].each do |field|
+      it "#{field}が負なら無効" do
+        material = build(:material, field => -1)
+        expect(material).to be_invalid
+      end
+    end
+  end
+
   describe "アソシエーション" do
     it "ユーザーが削除されると原材料も削除される" do
       material = create(:material)

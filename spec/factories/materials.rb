@@ -6,5 +6,13 @@ FactoryBot.define do
     unit { "g" }
     additive { false }
     user
+
+    trait :with_nutrition do
+      energy { 349 }
+      protein { 8.3 }
+      fat { 1.5 }
+      carbohydrate { 75.8 }
+      salt { 0 }
+    end
   end
 end

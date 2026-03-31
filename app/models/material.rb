@@ -12,6 +12,11 @@ class Material < ApplicationRecord
   validates :purchase_price, presence: true, numericality: { greater_than: 0 }
   validates :purchase_quantity, presence: true, numericality: { greater_than: 0 }
   validates :unit, presence: true, inclusion: { in: ALLOWED_UNITS }
+  validates :energy, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :protein, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :fat, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :carbohydrate, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :salt, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   before_validation :calculate_unit_price
 
