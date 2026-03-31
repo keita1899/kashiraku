@@ -12,6 +12,11 @@ ja:
         unit: 単位
         unit_price: 単価
         additive: 添加物
+        energy: エネルギー（kcal）
+        protein: たんぱく質（g）
+        fat: 脂質（g）
+        carbohydrate: 炭水化物（g）
+        salt: 食塩相当量（g）
       product:
         name: 商品名
         category: カテゴリ
