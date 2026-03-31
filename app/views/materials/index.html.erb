@@ -28,9 +28,9 @@
                 <span class="ml-1 text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">添加物</span>
               <% end %>
             </td>
-            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.purchase_price, unit: "¥", precision: 0, format: "%u%n") %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.purchase_price, unit: "円", precision: 0, format: "%n%u") %></td>
             <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= material.purchase_quantity %><%= material.unit %></td>
-            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.unit_price, unit: "¥", precision: 2, format: "%u%n") %>/<%= material.unit %></td>
+            <td class="px-4 py-3 text-sm text-gray-700 text-right"><%= number_to_currency(material.unit_price, unit: "円", precision: 2, format: "%n%u") %>/<%= material.unit %></td>
             <td class="px-4 py-3 text-sm">
               <% if material.allergens.any? %>
                 <div class="flex flex-wrap gap-1">
