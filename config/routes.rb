@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     post "users/guest_sign_in", to: "users/guest_sessions#create", as: :guest_sign_in
   end
 
-  resource :settings, only: %i[show]
+  resource :settings, only: %i[show update]
   resource :account, only: %i[destroy]
   resources :materials, only: %i[index new create edit update destroy]
   resources :products, only: %i[index new create edit update destroy] do

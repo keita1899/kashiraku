@@ -23,8 +23,13 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">製造者</label>
-        <input type="text" placeholder="例: ○○製菓 東京都..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+        <label class="block text-sm font-medium text-gray-700 mb-1">製造者名</label>
+        <input type="text" value="<%= current_user.manufacturer_name %>" placeholder="例: ○○製菓" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">製造者住所</label>
+        <input type="text" value="<%= current_user.manufacturer_address %>" placeholder="例: 東京都渋谷区..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
       </div>
     </div>
 
@@ -78,7 +83,13 @@
             </div>
             <div class="flex gap-1 mt-1">
               <dt class="shrink-0 font-bold">製造者</dt>
-              <dd><span class="text-gray-400">（要入力）</span></dd>
+              <dd>
+                <% if current_user.manufacturer_name.present? %>
+                  <%= current_user.manufacturer_name %><% if current_user.manufacturer_address.present? %> <%= current_user.manufacturer_address %><% end %>
+                <% else %>
+                  <span class="text-gray-400">（要入力）</span>
+                <% end %>
+              </dd>
             </div>
           </dl>
         </div>

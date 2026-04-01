@@ -18,6 +18,9 @@ ja:
         fat: 脂質（g）
         carbohydrate: 炭水化物（g）
         salt: 食塩相当量（g）
+      user:
+        manufacturer_name: 製造者名
+        manufacturer_address: 住所
       product:
         name: 商品名
         category: カテゴリ
