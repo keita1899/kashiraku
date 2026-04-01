@@ -1,30 +1,33 @@
-<%= form_with(model: product, class: "space-y-6", data: { controller: "cost-calculator allergen-display nutrition-calculator" }) do |f| %>
+<div class="bg-white rounded-xl shadow-sm p-6 space-y-6">
+  <p class="text-sm font-medium text-gray-700">商品情報</p>
+
   <div>
     <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
     <%= f.text_field :name, class: "w-full border #{error_border(f.object, :name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
     <%= render "shared/field_errors", object: product, field: :name %>
   </div>
 
-  <div class="flex flex-col md:flex-row gap-6">
-    <div class="md:w-3/5">
-      <%= f.label :category, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.select :category, Product::CATEGORIES.map { |c| [c, c] },
-          { include_blank: "選択してください" },
-          class: "w-full border #{error_border(f.object, :category)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
-      <%= render "shared/field_errors", object: product, field: :category %>
-    </div>
-
-    <div class="md:w-2/5">
-      <%= f.label :sales_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.number_field :sales_price, min: 1,
-          data: { cost_calculator_target: "salesPrice", action: "input->cost-calculator#recalculate" },
-          class: "w-full border #{error_border(f.object, :sales_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
-      <%= render "shared/field_errors", object: product, field: :sales_price %>
-    </div>
+  <div>
+    <%= f.label :category, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.select :category, Product::CATEGORIES.map { |c| [c, c] },
+        { include_blank: "選択してください" },
+        class: "w-full border #{error_border(f.object, :category)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: product, field: :category %>
   </div>
 
-  <hr class="my-6 border-gray-200">
+  <div>
+    <%= f.label :sales_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <div class="relative">
+      <%= f.number_field :sales_price, min: 1,
+          data: { cost_calculator_target: "salesPrice", action: "input->cost-calculator#recalculate" },
+          class: "w-full border #{error_border(f.object, :sales_price)} rounded-lg px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">円</span>
+    </div>
+    <%= render "shared/field_errors", object: product, field: :sales_price %>
+  </div>
+</div>
 
+<div class="bg-white rounded-xl shadow-sm p-6">
   <div data-controller="nested-form">
     <div class="flex justify-between items-center mb-3">
       <span class="block text-sm font-medium text-gray-700">原材料</span>
@@ -45,22 +48,14 @@
     <div data-nested-form-target="container" class="space-y-3"
          data-action="change->cost-calculator#recalculate input->cost-calculator#recalculate change->allergen-display#updateAllergens change->nutrition-calculator#recalculate input->nutrition-calculator#recalculate">
       <%= f.fields_for :product_materials do |pm| %>
-        <%= render "product_material_fields", f: pm, materials: @materials %>
+        <%= render "product_material_fields", f: pm, materials: materials %>
       <% end %>
     </div>
 
     <template data-nested-form-target="template">
       <%= f.fields_for :product_materials, ProductMaterial.new, child_index: "NEW_RECORD" do |pm| %>
-        <%= render "product_material_fields", f: pm, materials: @materials %>
+        <%= render "product_material_fields", f: pm, materials: materials %>
       <% end %>
     </template>
   </div>
-
-  <%= render "cost_summary", product: product %>
-  <%= render "nutrition_summary", product: product %>
-  <%= render "allergen_summary", product: product %>
-
-  <div>
-    <%= f.submit class: "w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>
