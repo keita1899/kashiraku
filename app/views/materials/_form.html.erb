@@ -1,6 +1,9 @@
 <%= form_with(model: material, class: "space-y-6", data: { controller: "unit-price" }) do |f| %>
   <div>
-    <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <div class="flex items-center gap-1 mb-1">
+      <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+      <span class="text-red-500">*</span>
+    </div>
     <%= f.text_field :name, class: "w-full border #{error_border(f.object, :name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
     <%= render "shared/field_errors", object: material, field: :name %>
   </div>
@@ -12,9 +15,18 @@
     <%= render "shared/field_errors", object: material, field: :display_name %>
   </div>
 
+  <div>
+    <%= f.label :origin, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :origin, placeholder: "例: 北海道", class: "w-full border #{error_border(f.object, :origin)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+    <%= render "shared/field_errors", object: material, field: :origin %>
+  </div>
+
   <div class="grid grid-cols-2 gap-4">
     <div>
-      <%= f.label :purchase_price, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="flex items-center gap-1 mb-1">
+        <%= f.label :purchase_price, class: "block text-sm font-medium text-gray-700" %>
+        <span class="text-red-500">*</span>
+      </div>
       <%= f.number_field :purchase_price, step: 0.01, min: 0,
           data: { unit_price_target: "price", action: "input->unit-price#calculate" },
           class: "w-full border #{error_border(f.object, :purchase_price)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
@@ -22,7 +34,10 @@
     </div>
 
     <div>
-      <%= f.label :purchase_quantity, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="flex items-center gap-1 mb-1">
+        <%= f.label :purchase_quantity, class: "block text-sm font-medium text-gray-700" %>
+        <span class="text-red-500">*</span>
+      </div>
       <%= f.number_field :purchase_quantity, step: 0.01, min: 0,
           data: { unit_price_target: "quantity", action: "input->unit-price#calculate" },
           class: "w-full border #{error_border(f.object, :purchase_quantity)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
@@ -32,7 +47,10 @@
 
   <div class="grid grid-cols-2 gap-4">
     <div>
-      <%= f.label :unit, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="flex items-center gap-1 mb-1">
+        <%= f.label :unit, class: "block text-sm font-medium text-gray-700" %>
+        <span class="text-red-500">*</span>
+      </div>
       <%= f.select :unit, Material::ALLOWED_UNITS.map { |u| [u, u] },
           {}, class: "w-full border #{error_border(f.object, :unit)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
       <%= render "shared/field_errors", object: material, field: :unit %>

@@ -7,6 +7,7 @@ ja:
       material:
         name: 原材料名
         display_name: 表示名
+        origin: 産地
         purchase_price: 購入価格
         purchase_quantity: 購入量
         unit: 単位
