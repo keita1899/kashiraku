@@ -1,0 +1,76 @@
+<div class="mx-auto space-y-3" style="max-width: 400px;">
+  <table class="w-full border-collapse border border-black text-xs leading-relaxed" style="font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;">
+    <tbody>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">名称</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewProductName"><%= food_label.product_name.presence || content_tag(:span, "（要入力）", class: "text-gray-400") %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">原材料名</th>
+        <td class="border border-black px-2 py-1">
+          <% if food_label.ingredients_text.present? %>
+            <%= food_label.ingredients_text %>
+          <% else %>
+            <span class="text-gray-400">-</span>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">内容量</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewContentQuantity"><%= food_label.content_quantity.presence || content_tag(:span, "（要入力）", class: "text-gray-400") %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">消費期限</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewExpirationDate"><%= food_label.expiration_date.presence || content_tag(:span, "（要入力）", class: "text-gray-400") %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">保存方法</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewStorageMethod"><%= food_label.storage_method.presence || content_tag(:span, "（要入力）", class: "text-gray-400") %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">製造者</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewManufacturer"><%= food_label.manufacturer_text.presence || content_tag(:span, "（要入力）", class: "text-gray-400") %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="w-full border-collapse border border-black text-xs leading-relaxed" style="font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;">
+    <thead>
+      <tr>
+        <th colspan="2" class="border border-black px-2 py-1 text-left font-bold">栄養成分表示（1個あたり）</th>
+      </tr>
+    </thead>
+    <% if product.has_nutrition_data? %>
+      <tbody>
+        <tr>
+          <td class="border border-black px-2 py-1">エネルギー</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_energy.round %> kcal</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">たんぱく質</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_protein.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">脂質</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_fat.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">炭水化物</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_carbohydrate.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">食塩相当量</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_salt.round(1) %> g</td>
+        </tr>
+      </tbody>
+    <% else %>
+      <tbody>
+        <tr>
+          <td colspan="2" class="border border-black px-2 py-1 text-gray-400">-</td>
+        </tr>
+      </tbody>
+    <% end %>
+  </table>
+
+  <p class="text-xs text-gray-400 mt-2">※ このプレビューは作成補助を目的としたものです。表示内容の最終確認は製造者の責任で行ってください。</p>
+</div>

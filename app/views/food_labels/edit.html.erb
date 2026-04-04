@@ -1,0 +1,108 @@
+<div class="max-w-2xl mx-auto">
+  <%= link_to "← 商品編集に戻る", edit_product_path(@product), class: "text-sm text-gray-500 hover:text-gray-700 mb-4 inline-block" %>
+
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">食品表示ラベル — <%= @product.name %></h1>
+
+  <div class="space-y-6" data-controller="label-preview">
+    <%= form_with(model: @food_label, url: product_food_label_path(@product), method: :patch, class: "bg-white rounded-xl shadow-sm p-6 space-y-4") do |f| %>
+      <p class="text-sm font-medium text-gray-700">ラベル情報</p>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :product_name, "名称", class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.select :product_name, FoodLabel::PRODUCT_NAMES.map { |n| [n, n] },
+            { include_blank: "選択してください" },
+            data: { action: "label-preview#update", label_preview_preview_param: "previewProductName" },
+            class: "w-full border #{error_border(@food_label, :product_name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :product_name %>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :content_quantity, class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.text_field :content_quantity, placeholder: "例: 1個",
+            data: { action: "input->label-preview#update", label_preview_preview_param: "previewContentQuantity" },
+            class: "w-full border #{error_border(@food_label, :content_quantity)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :content_quantity %>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :expiration_date, class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.select :expiration_date, FoodLabel::EXPIRATION_DATES.map { |d| [d, d] },
+            { include_blank: "選択してください" },
+            data: { action: "label-preview#update", label_preview_preview_param: "previewExpirationDate" },
+            class: "w-full border #{error_border(@food_label, :expiration_date)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :expiration_date %>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :storage_method, class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.select :storage_method, FoodLabel::STORAGE_METHODS.map { |m| [m, m] },
+            { include_blank: "選択してください" },
+            data: { action: "label-preview#update", label_preview_preview_param: "previewStorageMethod" },
+            class: "w-full border #{error_border(@food_label, :storage_method)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :storage_method %>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :manufacturer_name, class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.text_field :manufacturer_name,
+            value: @food_label.manufacturer_name.presence || current_user.manufacturer_name,
+            placeholder: "例: ○○製菓",
+            data: { label_preview_target: "manufacturerName", action: "input->label-preview#updateManufacturer" },
+            class: "w-full border #{error_border(@food_label, :manufacturer_name)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :manufacturer_name %>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-1 mb-1">
+          <%= f.label :manufacturer_address, class: "block text-sm font-medium text-gray-700" %>
+          <span class="text-red-500">*</span>
+        </div>
+        <%= f.text_field :manufacturer_address,
+            value: @food_label.manufacturer_address.presence || current_user.manufacturer_address,
+            placeholder: "例: 東京都渋谷区...",
+            data: { label_preview_target: "manufacturerAddress", action: "input->label-preview#updateManufacturer" },
+            class: "w-full border #{error_border(@food_label, :manufacturer_address)} rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" %>
+        <%= render "shared/field_errors", object: @food_label, field: :manufacturer_address %>
+      </div>
+
+      <div class="flex justify-center gap-4 pt-2">
+        <%= link_to "戻る", edit_product_path(@product), class: "bg-gray-200 text-gray-700 px-12 py-3 rounded-lg hover:bg-gray-300 text-sm font-medium text-center" %>
+        <%= f.submit "保存する", class: "bg-orange-500 text-white px-12 py-3 rounded-lg hover:bg-orange-600 text-sm font-medium cursor-pointer" %>
+      </div>
+    <% end %>
+
+    <div class="bg-white rounded-xl shadow-sm p-6" data-controller="label-copy">
+      <div class="flex justify-between items-center mb-3">
+        <p class="text-sm font-medium text-gray-700">プレビュー</p>
+        <div class="flex items-center gap-2">
+          <span data-label-copy-target="message" class="text-xs text-orange-500 hidden">コピーしました</span>
+          <button type="button" data-action="label-copy#copy" data-label-copy-target="button"
+            class="text-gray-400 hover:text-orange-500 cursor-pointer" title="テキストをコピー">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div data-label-copy-target="content">
+        <%= render "shared/food_label_preview", food_label: @food_label, product: @product %>
+      </div>
+    </div>
+  </div>
+</div>

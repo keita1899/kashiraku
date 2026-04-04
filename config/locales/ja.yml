@@ -3,10 +3,12 @@ ja:
     models:
       material: 原材料
       product: 商品
+      food_label: 食品表示ラベル
     attributes:
       material:
         name: 原材料名
         display_name: 表示名
+        origin: 産地
         purchase_price: 購入価格
         purchase_quantity: 購入量
         unit: 単位
@@ -17,10 +19,20 @@ ja:
         fat: 脂質（g）
         carbohydrate: 炭水化物（g）
         salt: 食塩相当量（g）
+      user:
+        manufacturer_name: 製造者名
+        manufacturer_address: 住所
       product:
         name: 商品名
         category: カテゴリ
         sales_price: 販売価格
+      food_label:
+        product_name: 名称
+        content_quantity: 内容量
+        expiration_date: 消費期限
+        storage_method: 保存方法
+        manufacturer_name: 製造者名
+        manufacturer_address: 製造者住所
       product_material:
         material: 原材料
         quantity: 使用量
