@@ -51,6 +51,36 @@ RSpec.describe FoodLabel, type: :model do
       food_label = build(:food_label, manufacturer_address: nil)
       expect(food_label).to be_invalid
     end
+
+    it "content_quantityが255文字以内なら有効" do
+      food_label = build(:food_label, content_quantity: "a" * 255)
+      expect(food_label).to be_valid
+    end
+
+    it "content_quantityが256文字以上なら無効" do
+      food_label = build(:food_label, content_quantity: "a" * 256)
+      expect(food_label).to be_invalid
+    end
+
+    it "manufacturer_nameが255文字以内なら有効" do
+      food_label = build(:food_label, manufacturer_name: "a" * 255)
+      expect(food_label).to be_valid
+    end
+
+    it "manufacturer_nameが256文字以上なら無効" do
+      food_label = build(:food_label, manufacturer_name: "a" * 256)
+      expect(food_label).to be_invalid
+    end
+
+    it "manufacturer_addressが255文字以内なら有効" do
+      food_label = build(:food_label, manufacturer_address: "a" * 255)
+      expect(food_label).to be_valid
+    end
+
+    it "manufacturer_addressが256文字以上なら無効" do
+      food_label = build(:food_label, manufacturer_address: "a" * 256)
+      expect(food_label).to be_invalid
+    end
   end
 
   describe "#ingredients_text" do
