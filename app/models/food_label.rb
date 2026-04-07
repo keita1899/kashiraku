@@ -18,6 +18,8 @@ class FoodLabel < ApplicationRecord
 
   belongs_to :product
 
+  after_initialize :set_default_manufacturer, if: :new_record?
+
   validates :product_name, presence: true, inclusion: { in: PRODUCT_NAMES }
   validates :content_quantity, presence: true, length: { maximum: 255 }
   validates :expiration_date, presence: true, inclusion: { in: EXPIRATION_DATES }
@@ -40,5 +42,12 @@ class FoodLabel < ApplicationRecord
 
   def manufacturer_text
     [ manufacturer_name, manufacturer_address ].select(&:present?).join(" ")
+  end
+
+  private
+
+  def set_default_manufacturer
+    self.manufacturer_name ||= product&.user&.manufacturer_name
+    self.manufacturer_address ||= product&.user&.manufacturer_address
   end
 end
