@@ -83,6 +83,26 @@ RSpec.describe FoodLabel, type: :model do
     end
   end
 
+  describe "製造者デフォルト値" do
+    let(:user) { create(:user, manufacturer_name: "デフォルト製菓", manufacturer_address: "東京都新宿区") }
+    let(:product) { create(:product, user: user) }
+
+    it "新規レコードでは製造者名にユーザーの値がセットされる" do
+      food_label = product.build_food_label
+      expect(food_label.manufacturer_name).to eq("デフォルト製菓")
+    end
+
+    it "新規レコードでは住所にユーザーの値がセットされる" do
+      food_label = product.build_food_label
+      expect(food_label.manufacturer_address).to eq("東京都新宿区")
+    end
+
+    it "保存済みレコードではユーザーの値で上書きされない" do
+      food_label = create(:food_label, product: product, manufacturer_name: "元の製菓")
+      expect(food_label.reload.manufacturer_name).to eq("元の製菓")
+    end
+  end
+
   describe "#ingredients_text" do
     let(:product) { create(:product) }
     let(:food_label) { create(:food_label, product: product) }
