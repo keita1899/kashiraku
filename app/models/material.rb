@@ -20,6 +20,18 @@ class Material < ApplicationRecord
 
   before_validation :calculate_unit_price
 
+  def select_option_data
+    {
+      "data-unit-price" => unit_price.to_f,
+      "data-allergens" => allergens.map { |a| { name: a.name, required: a.required? } }.to_json,
+      "data-energy" => energy&.to_f || "",
+      "data-protein" => protein&.to_f || "",
+      "data-fat" => fat&.to_f || "",
+      "data-carbohydrate" => carbohydrate&.to_f || "",
+      "data-salt" => salt&.to_f || ""
+    }
+  end
+
   private
 
   def calculate_unit_price

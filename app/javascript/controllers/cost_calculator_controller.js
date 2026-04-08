@@ -45,15 +45,15 @@ export default class extends Controller {
   display({ salesPrice, totalCost, grossProfit, costRate, profitRate }, subtotals) {
     subtotals.forEach((subtotal, index) => {
       if (this.subtotalTargets[index]) {
-        this.subtotalTargets[index].textContent = `¥${subtotal.toLocaleString()}`
+        this.subtotalTargets[index].textContent = `${subtotal.toLocaleString()}円`
       }
     })
 
     if (!this.hasSummaryTarget) return
 
-    this.salesPriceDisplayTarget.textContent = `¥${Math.round(salesPrice).toLocaleString()}`
-    this.totalCostTarget.textContent = `¥${totalCost.toLocaleString()}`
-    this.grossProfitTarget.textContent = `¥${grossProfit.toLocaleString()}`
+    this.salesPriceDisplayTarget.textContent = `${Math.round(salesPrice).toLocaleString()}円`
+    this.totalCostTarget.textContent = `${totalCost.toLocaleString()}円`
+    this.grossProfitTarget.textContent = `${grossProfit.toLocaleString()}円`
     this.costRateTarget.textContent = `${costRate}%`
     this.profitRateTarget.textContent = `${profitRate}%`
   }

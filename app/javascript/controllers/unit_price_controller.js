@@ -9,7 +9,7 @@ export default class extends Controller {
 
     if (price > 0 && quantity > 0) {
       const unitPrice = (price / quantity).toFixed(2)
-      this.unitPriceTarget.textContent = `¥${unitPrice}`
+      this.unitPriceTarget.textContent = `${unitPrice}円`
     } else {
       this.unitPriceTarget.textContent = "---"
     }

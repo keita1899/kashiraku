@@ -41,4 +41,28 @@ RSpec.describe "Settings", type: :request do
       end
     end
   end
+
+  describe "PATCH /settings" do
+    context "ログイン時" do
+      before { sign_in user }
+
+      it "製造者情報を更新できる" do
+        patch settings_path, params: { user: { manufacturer_name: "テスト製菓", manufacturer_address: "東京都渋谷区1-1" } }
+        expect(user.reload).to have_attributes(manufacturer_name: "テスト製菓", manufacturer_address: "東京都渋谷区1-1")
+        expect(response).to redirect_to(settings_path)
+      end
+
+      it "更新成功時にフラッシュメッセージが表示される" do
+        patch settings_path, params: { user: { manufacturer_name: "テスト製菓" } }
+        expect(flash[:notice]).to eq("製造者情報を更新しました")
+      end
+    end
+
+    context "未ログイン時" do
+      it "リダイレクトされる" do
+        patch settings_path, params: { user: { manufacturer_name: "テスト製菓" } }
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
 end

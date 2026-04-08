@@ -50,7 +50,7 @@ class MaterialsController < ApplicationController
   end
 
   def material_params
-    params.require(:material).permit(:name, :display_name, :purchase_price, :purchase_quantity, :unit, :additive,
+    params.require(:material).permit(:name, :display_name, :origin, :purchase_price, :purchase_quantity, :unit, :additive,
                                      :energy, :protein, :fat, :carbohydrate, :salt, allergen_ids: [])
   end
 end

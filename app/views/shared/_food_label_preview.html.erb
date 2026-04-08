@@ -1,0 +1,70 @@
+<div class="mx-auto max-w-[400px] space-y-3">
+  <table class="w-full border-collapse border border-black text-xs leading-relaxed font-['Hiragino_Kaku_Gothic_ProN','Yu_Gothic',sans-serif]">
+    <tbody>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">名称</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewProductName"><%= label_value_or_placeholder(food_label.product_name) %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">原材料名</th>
+        <td class="border border-black px-2 py-1"><%= label_value_or_placeholder(food_label.ingredients_text, placeholder: "-") %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">内容量</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewContentQuantity"><%= label_value_or_placeholder(food_label.content_quantity) %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">消費期限</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewExpirationDate"><%= label_value_or_placeholder(food_label.expiration_date) %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">保存方法</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewStorageMethod"><%= label_value_or_placeholder(food_label.storage_method) %></td>
+      </tr>
+      <tr>
+        <th class="border border-black px-2 py-1 text-left align-top font-bold whitespace-nowrap">製造者</th>
+        <td class="border border-black px-2 py-1" data-label-preview-target="previewManufacturer"><%= label_value_or_placeholder(food_label.manufacturer_text) %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="w-full border-collapse border border-black text-xs leading-relaxed font-['Hiragino_Kaku_Gothic_ProN','Yu_Gothic',sans-serif]">
+    <thead>
+      <tr>
+        <th colspan="2" class="border border-black px-2 py-1 text-left font-bold">栄養成分表示（1個あたり）</th>
+      </tr>
+    </thead>
+    <% if product.has_nutrition_data? %>
+      <tbody>
+        <tr>
+          <td class="border border-black px-2 py-1">エネルギー</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_energy.round %> kcal</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">たんぱく質</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_protein.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">脂質</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_fat.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">炭水化物</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_carbohydrate.round(1) %> g</td>
+        </tr>
+        <tr>
+          <td class="border border-black px-2 py-1">食塩相当量</td>
+          <td class="border border-black px-2 py-1 text-right"><%= product.total_salt.round(1) %> g</td>
+        </tr>
+      </tbody>
+    <% else %>
+      <tbody>
+        <tr>
+          <td colspan="2" class="border border-black px-2 py-1 text-gray-400">-</td>
+        </tr>
+      </tbody>
+    <% end %>
+  </table>
+
+  <p class="text-xs text-gray-400 mt-2">※ このプレビューは作成補助を目的としたものです。表示内容の最終確認は製造者の責任で行ってください。</p>
+</div>

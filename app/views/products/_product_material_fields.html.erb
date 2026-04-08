@@ -28,7 +28,7 @@
       </div>
       <div class="w-24 md:flex-none">
         <span class="block text-xs text-gray-500 mb-1 md:hidden">小計</span>
-        <p class="px-3 py-2 text-sm text-gray-500" data-cost-calculator-target="subtotal"><%= number_to_currency(f.object.subtotal, unit: "¥", precision: 0, format: "%u%n") %></p>
+        <p class="px-3 py-2 text-sm text-gray-500" data-cost-calculator-target="subtotal"><%= number_to_currency(f.object.subtotal, unit: "円", precision: 0, format: "%n%u") %></p>
       </div>
     </div>
     <div class="hidden md:flex items-center">

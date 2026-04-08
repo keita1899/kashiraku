@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_27_140955) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_01_222332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_27_140955) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_allergens_on_name", unique: true
+  end
+
+  create_table "food_labels", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "product_name", null: false
+    t.string "content_quantity", null: false
+    t.string "expiration_date", null: false
+    t.string "storage_method", null: false
+    t.string "manufacturer_name", null: false
+    t.string "manufacturer_address", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_food_labels_on_product_id", unique: true
   end
 
   create_table "material_allergens", force: :cascade do |t|
@@ -49,6 +62,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_27_140955) do
     t.decimal "fat", precision: 10, scale: 2
     t.decimal "carbohydrate", precision: 10, scale: 2
     t.decimal "salt", precision: 10, scale: 2
+    t.string "origin"
     t.index ["user_id"], name: "index_materials_on_user_id"
   end
 
@@ -84,11 +98,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_27_140955) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "manufacturer_name"
+    t.string "manufacturer_address"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "food_labels", "products"
   add_foreign_key "material_allergens", "allergens"
   add_foreign_key "material_allergens", "materials"
   add_foreign_key "materials", "users"
