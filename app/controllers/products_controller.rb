@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   def index
-    @products = current_user.products.includes(:allergens, product_materials: :material).order(created_at: :desc)
+    @pagy, @products = pagy(current_user.products.includes(:allergens, product_materials: :material).order(created_at: :desc))
   end
 
   def new
