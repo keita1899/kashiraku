@@ -1,6 +1,6 @@
 class MaterialsController < ApplicationController
   def index
-    @materials = current_user.materials.includes(:allergens).order(created_at: :desc)
+    @pagy, @materials = pagy(current_user.materials.includes(:allergens).order(created_at: :desc))
   end
 
   def new

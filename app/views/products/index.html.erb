@@ -6,6 +6,7 @@
 </div>
 
 <% if @products.any? %>
+  <p class="text-sm text-gray-500 text-right mb-2"><%= pagy_info_text(@pagy) %></p>
   <div class="bg-white rounded-xl shadow-sm overflow-hidden">
     <table class="w-full">
       <thead class="bg-gray-100">
@@ -56,6 +57,9 @@
       </tbody>
     </table>
   </div>
+  <% if @pagy.last > 1 %>
+    <%== @pagy.series_nav %>
+  <% end %>
 <% else %>
   <div class="bg-white rounded-xl shadow-sm p-8 text-center">
     <p class="text-gray-500 mb-4">商品がまだ登録されていません</p>

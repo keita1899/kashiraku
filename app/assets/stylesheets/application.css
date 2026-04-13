@@ -8,3 +8,44 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Pagy pagination */
+.pagy {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pagy a {
+  display: block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  color: #374151;
+  background-color: #f3f4f6;
+  text-decoration: none;
+}
+
+.pagy a[href]:hover {
+  background-color: #fed7aa;
+  color: #c2410c;
+}
+
+.pagy a[aria-current="page"] {
+  background-color: #f97316;
+  color: #fff;
+}
+
+.pagy a:not([href]) {
+  cursor: default;
+}
+
+.pagy a[role="link"]:not([aria-current]) {
+  opacity: 0.5;
+}
+
+.pagy a[role="separator"] {
+  background-color: transparent;
+}

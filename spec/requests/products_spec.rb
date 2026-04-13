@@ -78,6 +78,41 @@ RSpec.describe "Products", type: :request do
 
       expect(response.body).to include("卵")
     end
+
+    describe "ページネーション" do
+      before { create_list(:product, 21, user: user) }
+
+      it "件数情報が表示される" do
+        get products_path
+
+        expect(response.body).to include("全21件中")
+      end
+
+      it "20件を超えるとページネーションが表示される" do
+        get products_path
+
+        expect(response.body).to include("?page=2")
+      end
+
+      it "2ページ目にアクセスできる" do
+        get products_path, params: { page: 2 }
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "存在しないページ番号は1ページ目にリダイレクトされる" do
+        get products_path, params: { page: 999 }
+
+        expect(response).to redirect_to(products_path)
+      end
+    end
+
+    it "20件以下ではページネーションが表示されない" do
+      create(:product, user: user)
+      get products_path
+
+      expect(response.body).not_to include("?page=2")
+    end
   end
 
   describe "GET /products/new" do

@@ -34,3 +34,6 @@ RSpec/MultipleExpectations:
 
 RSpec/ExampleLength:
   Max: 10
+
+FactoryBot/ExcessiveCreateList:
+  MaxAmount: 25

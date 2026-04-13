@@ -53,6 +53,41 @@ RSpec.describe "Materials", type: :request do
       expect(response.body).to include("薄力粉")
       expect(response.body).not_to include("他人の材料")
     end
+
+    describe "ページネーション" do
+      before { create_list(:material, 21, user: user) }
+
+      it "件数情報が表示される" do
+        get materials_path
+
+        expect(response.body).to include("全21件中")
+      end
+
+      it "20件を超えるとページネーションが表示される" do
+        get materials_path
+
+        expect(response.body).to include("?page=2")
+      end
+
+      it "2ページ目にアクセスできる" do
+        get materials_path, params: { page: 2 }
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "存在しないページ番号は1ページ目にリダイレクトされる" do
+        get materials_path, params: { page: 999 }
+
+        expect(response).to redirect_to(materials_path)
+      end
+    end
+
+    it "20件以下ではページネーションが表示されない" do
+      create(:material, user: user)
+      get materials_path
+
+      expect(response.body).not_to include("?page=2")
+    end
   end
 
   describe "GET /materials/new" do
